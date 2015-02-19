@@ -1,0 +1,29 @@
+{
+    "repositories": [
+        {
+            "type": "pear",
+            "url": "http://pear.php.net/"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "require": {
+        "slim/slim": "2.*",
+        "slim/views": "0.1.*",
+        "slim/logger": "0.1.*",
+        "smarty/smarty": "3.*",
+        "j4mie/idiorm": "1.*",
+        "themattharris/tmhoauth": "0.*",
+        "mobiledetect/mobiledetectlib" : "*",
+        "pear-pear.php.net/PEAR" : "*",
+        "pear-pear.php.net/HTTP_Client" : "*"
+    },
+    "autoload": {
+        "psr-0" : {
+           "MyLib" : "src",
+           "Controller": "src",
+           "Model": "src"
+        }
+    }
+}

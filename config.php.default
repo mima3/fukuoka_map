@@ -1,0 +1,15 @@
+<?php
+const FONT_PATH = '';
+const DATA_DIR = './data';
+const MS_AZURE_KEY = 'APIKEY todo=';
+const DB_PATH = 'C:\pleiades-e3.6\xampp\htdocs\fukuoka_map\fukuoka_map.sqlite';
+const TW_CONSUMER_KEY    = 'APIKEY todo';
+const TW_CONSUMER_SECRET =  'APIKEY todo';
+const TEAPOT_SPARQL_ENDPOINT = 'http://teapot-api.bodic.org/api/v1/sparql';
+const TEAPOT_PLACE_ENDPOINT = 'http://teapot-api.bodic.org/api/v1/places';
+const KOKUDO_ENDPOINT = 'http://needtec.sakura.ne.jp/kokudo';
+
+$blackListAccount = array(); // ex array('mima_ita')
+const DEBUG = 1;
+const PHP_PATH = 'php';
+const APP_NAME = 'fukuoka_map';
