@@ -8,7 +8,7 @@ class GetHospitalController extends \Controller\ControllerBase
 {
     public function route()
     {
-        $medical_subjects = [];
+        $medical_subjects = array();
         if ($this->app->request->params('medical_subjects')) {
             $medical_subjects = $this->app->request->params('medical_subjects');
         }
