@@ -13,7 +13,7 @@ class GetShelterController extends \Controller\ControllerBase
         $ret = $db->getContents($key);
         if (!$ret) {
             $query = new \MyLib\TeapotQuery($this->modules['TeapotCtrl']);
-            $query->columns(['?s', '?p', '?o'])
+            $query->columns(array('?s', '?p', '?o'))
                 ->distinct()
                 ->where('?s', '<http://teapot.bodic.org/predicate/避難所情報>', '?x')
                 ->where('?s', '?p', '?o')

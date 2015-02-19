@@ -16,7 +16,7 @@ class HospitalMapController extends \Controller\ControllerBase
         $ret = $db->getContents($key);
         if (!$ret) {
             $query = new \MyLib\TeapotQuery($this->modules['TeapotCtrl']);
-            $query->columns(['?o'])
+            $query->columns(array('?o'))
                 ->distinct()
                 ->where('?s', '<http://teapot.bodic.org/predicate/診療科目>', '?o')
                 ->orderby('?o');

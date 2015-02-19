@@ -179,6 +179,15 @@ $app->get('/json/get_sediment_disaster_hazard_area', function() use ($app, $modu
 
 
 /**
+ * 翻訳情報を検索して取得する
+ */
+$app->get('/json/get_translation', function() use ($app, $modules, $models, $lang) {
+    $ctrl = new \Controller\Json\GetTranslationController($app, $modules, $models);
+    $ctrl->route();
+});
+
+
+/**
  * 翻訳を変更
  */
 $app->post('/json/set_translation', 
