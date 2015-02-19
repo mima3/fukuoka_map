@@ -1,0 +1,15 @@
+{
+  "ja": {
+    "title" : "日本語",
+    "gmapCode" : "ja"
+  },
+  "en": {
+    "title" : "English",
+    "gmapCode" : "en"
+  },
+  "ar": {
+    "title" :"Arabic",
+    "gmapCode" : "ar",
+    "rtl" : true
+  }  
+} 
