@@ -15,7 +15,7 @@
   <!-- マーカーのInfoWindowのテンプレート -->
   <script id="tmplInfoWindow" type="text/x-jsrender">
   {literal}
-    <p>{{:data['http://www.w3.org/2000/01/rdf-schema#label']}}（{{:data['http://teapot.bodic.org/predicate/種別']}}）</p>
+    <p>{{:data['http://www.w3.org/2000/01/rdf-schema#label'].translate_value}}（{{:data['http://teapot.bodic.org/predicate/種別'].translate_value}}）</p>
     {{if data['building']}}
       <table class="normal">
         <thead>
@@ -28,11 +28,11 @@
         <tbody>
         {{props data['building']}}
           <tr>
-            <td>{{>prop['http://www.w3.org/2000/01/rdf-schema#label']}}</td>
-            <td>{{>prop['http://teapot.bodic.org/predicate/構造']}}</td>
-            <td>{{>prop['http://teapot.bodic.org/predicate/地上階数']}}</td>
-            <td>{{>prop['http://teapot.bodic.org/predicate/地下階数']}}</td>
-            <td>{{>prop['http://teapot.bodic.org/predicate/延床面積']}}</td>
+            <td>{{>prop['http://www.w3.org/2000/01/rdf-schema#label'].translate_value}}</td>
+            <td>{{>prop['http://teapot.bodic.org/predicate/構造'].translate_value}}</td>
+            <td>{{>prop['http://teapot.bodic.org/predicate/地上階数'].translate_value}}</td>
+            <td>{{>prop['http://teapot.bodic.org/predicate/地下階数'].translate_value}}</td>
+            <td>{{>prop['http://teapot.bodic.org/predicate/延床面積'].translate_value}}</td>
           </tr>
         {{/props}}
         </tbody>

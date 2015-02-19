@@ -99,8 +99,8 @@ $(function() {
       var marker;
       if (obj['http://teapot.bodic.org/predicate/緯度'] &&
           obj['http://teapot.bodic.org/predicate/経度']) {
-        var lat = obj['http://teapot.bodic.org/predicate/緯度'];
-        var long = obj['http://teapot.bodic.org/predicate/経度'];
+        var lat = obj['http://teapot.bodic.org/predicate/緯度'].value;
+        var long = obj['http://teapot.bodic.org/predicate/経度'].value;
         var pos = new google.maps.LatLng(parseFloat(lat), parseFloat(long));
         marker = new google.maps.Marker({
           icon : '/' + getAppName() + '/img/hospital.png'
@@ -108,7 +108,6 @@ $(function() {
         marker.setPosition(pos);
         // マーカーのクリックイベント
         google.maps.event.addListener(marker, "click", function() {
-          //var c = obj['http://www.w3.org/2000/01/rdf-schema#label'];
           var tmp = key.split('/');
           var prefix = 'route_' + tmp[tmp.length-1];
           console.log(obj);

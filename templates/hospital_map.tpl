@@ -17,35 +17,35 @@
     <table class="normal infoWindow">
       <tr>
         <th>{/literal}{$label['name']}{literal}</th>
-        <td>{{:data['http://www.w3.org/2000/01/rdf-schema#label']}}</td>
+        <td>{{:data['http://www.w3.org/2000/01/rdf-schema#label'].translate_value}}</td>
       </tr>
       <tr>
         <th>{/literal}{$label['kind']}{literal}</th>
-        <td>{{:data['http://teapot.bodic.org/predicate/種別']}}</td>
+        <td>{{:data['http://teapot.bodic.org/predicate/種別'].translate_value}}</td>
       </tr>
       <tr>
         <th>{/literal}{$label['postcode']}{literal}</th>
-        <td>{{:data['http://teapot.bodic.org/predicate/郵便番号']}}</td>
+        <td>{{:data['http://teapot.bodic.org/predicate/郵便番号'].translate_value}}</td>
       </tr>
       <tr>
         <th>{/literal}{$label['address']}{literal}</th>
-        <td>{{:data['http://teapot.bodic.org/predicate/addressClean']}}</td>
+        <td>{{:data['http://teapot.bodic.org/predicate/addressClean'].translate_value}}</td>
       </tr>
       <tr>
         <th>{/literal}{$label['phoneno']}{literal}</th>
-        <td>092-{{:data['http://teapot.bodic.org/predicate/電話番号']}}</td>
+        <td>092-{{:data['http://teapot.bodic.org/predicate/電話番号'].translate_value}}</td>
       </tr>
       <tr>
         <th>{/literal}{$label['medical_subject']}{literal}</th>
         <td>
-          {{for data['http://teapot.bodic.org/predicate/診療科目']}}
+          {{for data['http://teapot.bodic.org/predicate/診療科目'].translate_value}}
             {{:}} 
           {{/for}}
         </td>
       </tr>
       <tr>
         <th>{/literal}{$label['bedcount']}{literal}</th>
-        <td>{{:data['http://teapot.bodic.org/predicate/病床数合計']}}</td>
+        <td>{{:data['http://teapot.bodic.org/predicate/病床数合計'].translate_value}}</td>
       </tr>
       <tr>
         <th>{/literal}{$label['distance']}{literal}</th>

@@ -7,6 +7,22 @@
     "title" : "English",
     "gmapCode" : "en"
   },
+  "ko": {
+    "title" : "한국어",
+    "gmapCode" : "ko"
+  },
+  "zh-CHS": {
+    "title" : "中国（简体）",
+    "gmapCode" : "zh-CN"
+  },
+  "zh-CHT": {
+    "title" : "中國（繁體）",
+    "gmapCode" : "zh-TW"
+  },
+  "de": {
+    "title" : "German",
+    "gmapCode" : "de"   
+  },
   "ar": {
     "title" :"Arabic",
     "gmapCode" : "ar",

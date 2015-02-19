@@ -247,10 +247,11 @@ var teapot = (function() {
             }
             tmp = tmp[k];
           } else {
-            var v = recs[i][hierarchy[j+1]].value;
-            if (recs[i][hierarchy[j+1]].translate_value) {
-              v = recs[i][hierarchy[j+1]].translate_value;
-            }
+            var v = {
+              value : recs[i][hierarchy[j+1]].value,
+              translate_value : recs[i][hierarchy[j+1]].translate_value
+            };
+
             if (tmp[k]) {
               // 末尾の場合
               if (!Array.isArray(tmp[k])) {

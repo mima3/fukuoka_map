@@ -18,11 +18,15 @@ class GetShelterController extends \Controller\ControllerBase
                 ->where('?s', '<http://teapot.bodic.org/predicate/避難所情報>', '?x')
                 ->where('?s', '?p', '?o')
                 ->filter('!isBlank(?o)')
-                ->union()
-                    ->where('?s', '<http://teapot.bodic.org/predicate/避難所情報>', '?x')
-                    ->where('?s', '?p', '?y')
-                    ->where('?y', '?p', '?o')
-                    ->filter('isBlank(?y)')
+                ->filter('
+                   ?p = <http://www.w3.org/2000/01/rdf-schema#label> ||
+                   ?p = <http://teapot.bodic.org/predicate/種別> ||
+                   ?p = <http://teapot.bodic.org/predicate/避難所情報> ||
+                   ?p = <http://teapot.bodic.org/predicate/緯度> ||
+                   ?p = <http://teapot.bodic.org/predicate/経度> ||
+                   ?p = <http://teapot.bodic.org/predicate/種別> ||
+                   ?p = <http://teapot.bodic.org/predicate/郵便番号> ||
+                   ?p = <http://teapot.bodic.org/predicate/addressClean>')
                 ->orderby('?s ?p');
             $ret = $query->execute();
             if ($ret['resultCode'] == \MyLib\TeapotCtrl::RESULT_CODE_OK) {
