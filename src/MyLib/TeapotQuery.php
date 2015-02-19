@@ -7,7 +7,7 @@ class TeapotQuery
 {
     private $api;
     private $strCol = '*';
-    private $lstWhere = [];
+    private $lstWhere = array();
     private $limit;
     private $distinct=False;
     private $offset;
@@ -113,7 +113,7 @@ class TeapotQuery
     function execute() {
         $sql = $this->sql();
         $this->strCol = '*';
-        $this->lstWhere = [];
+        $this->lstWhere = array();
         $this->limit = NULL;
         $this->distinct=False;
         $this->offset = NULL;
