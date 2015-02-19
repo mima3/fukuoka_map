@@ -6,8 +6,8 @@ namespace MyLib;
 class TeapotWhere
 {
     private $parent;
-    private $lstWhere = [];
-    private $lstFilter = [];
+    private $lstWhere = array();
+    private $lstFilter = array();
     public function __construct($parent) {
       $this->parent = $parent;
     }
