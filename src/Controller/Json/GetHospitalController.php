@@ -8,7 +8,7 @@ class GetHospitalController extends \Controller\ControllerBase
 {
     public function route()
     {
-        $medical_subjects = [];
+        $medical_subjects = array();
         if ($this->app->request->params('medical_subjects')) {
             $medical_subjects = $this->app->request->params('medical_subjects');
         }
@@ -39,7 +39,7 @@ class GetHospitalController extends \Controller\ControllerBase
                 ++$i;
             }
             $query = new \MyLib\TeapotQuery($this->modules['TeapotCtrl']);
-            $query->columns(['?s', '?p', '?o'])
+            $query->columns(array('?s', '?p', '?o'))
                 ->distinct()
                 ->where('?s', '<http://teapot.bodic.org/predicate/診療科目>', '?x')
                 ->where('?s', '?p', '?o')
