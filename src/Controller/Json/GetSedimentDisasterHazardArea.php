@@ -8,10 +8,14 @@ class GetSedimentDisasterHazardArea extends \Controller\ControllerBase
 {
     public function route()
     {
-        $swlat = 33.42294614050342 ;  //$this->app->request->params('swlat');
-        $swlng = 130.02156319824212; //$this->app->request->params('swlng');
-        $nelat = 33.88989773419436 ;  //$this->app->request->params('nelat');
-        $nelng = 130.57087960449212; //$this->app->request->params('nelng');
+        $swlat = $this->app->request->params('swlat');
+        $swlng = $this->app->request->params('swlng');
+        $nelat = $this->app->request->params('nelat');
+        $nelng = $this->app->request->params('nelng');
+        if (abs($swlat - $nelat) >= 0.5 || abs($swlng - $nelng) >= 0.5) {
+            $this->sendJsonData(3, 'out of range.', null);
+            return;
+        }
 
         $db = $this->models['ApiCacheModel'];
         $key = 'GetSedimentDisasterHazardArea_' . $swlat .'_'.$swlng .'_'.$nelat .'_'.$nelng;

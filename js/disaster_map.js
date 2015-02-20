@@ -151,154 +151,108 @@ $(function() {
       /**
        * 土砂災害危険個所（面）
        */
-      function getSedimentDisasterHazardAreaSurface(callback) {
-        util.getJson(
-          '/' + getAppName() + '/json/get_sediment_disaster_hazard_area',
-          {
-            swlat : swlat,
-            swlng : swlng,
-            nelat : nelat,
-            nelng : nelng,
-            lang: header.getLang()
-          },
-          function(err, data) {
-            console.log('getSedimentDisasterHazardAreaSurface', err, data);
-            if (err) {
-              callback(err, null);
-              return;
+      function createGetSedimentDisasterHazardAreaSurfaceFnc(swlat, swlng, nelat, nelng) {
+        return function(callback) {
+          util.getJson(
+            '/' + getAppName() + '/json/get_sediment_disaster_hazard_area',
+            {
+              swlat : swlat,
+              swlng : swlng,
+              nelat : nelat,
+              nelng : nelng,
+              lang: header.getLang()
+            },
+            function(err, data) {
+              console.log('getSedimentDisasterHazardAreaSurface', err, data);
+              if (err) {
+                callback(err, null);
+                return;
+              }
+              dataFeatures = dataFeatures.concat(map.data.addGeoJson(data));
+              map.data.setStyle(styleSedimentFeature());
+              callback(null, null);
+            },
+            function() {
+              // 実行前
+            },
+            function() {
+              // 終了時
             }
-            dataFeatures = dataFeatures.concat(map.data.addGeoJson(data));
-            map.data.setStyle(styleSedimentFeature());
-            callback(null, null);
-          },
-          function() {
-            // 実行前
-          },
-          function() {
-            // 終了時
-          }
-        );
-      }
-
-      /**
-       * 土砂災害危険個所（線）
-       */
-      function getSedimentDisasterHazardAreaLine(callback) {
-        $.get(
-          '/kokudo/json/get_sediment_disaster_hazard_area_line_by_geometry',
-          {
-            swlat : swlat,
-            swlng : swlng,
-            nelat : nelat,
-            nelng : nelng,
-            lang: header.getLang()
-          },
-          function (res) {
-            console.log('getSedimentDisasterHazardAreaLine', res);
-            dataFeatures = dataFeatures.concat(map.data.addGeoJson(res));
-            map.data.setStyle(styleSedimentFeature());
-            callback(null, null);
-          },
-          'json'
-        ).error(function(e){
-           callback(e.responseText, null);
-        });
-      }
-
-      /**
-       * 土砂災害危険個所（点）
-       */
-      function getSedimentDisasterHazardAreaPoint(callback) {
-        $.get(
-          '/kokudo/json/get_sediment_disaster_hazard_area_point_by_geometry',
-          {
-            swlat : swlat,
-            swlng : swlng,
-            nelat : nelat,
-            nelng : nelng,
-            lang: header.getLang()
-          },
-          function (res) {
-            console.log('getSedimentDisasterHazardAreaPoint', res);
-            res.features.forEach(function(feature) {
-              var marker = new google.maps.Marker();
-              marker.setPosition(
-                new google.maps.LatLng(
-                  feature.geometry.coordinates[1], feature.geometry.coordinates[0]
-                )
-              );
-              marker.setMap(map);
-              dataMarkers.push(marker);
-              google.maps.event.addListener(marker, "click", function() {
-                var infowindow = new google.maps.InfoWindow({
-                  content: feature.properties.remarks + '<BR>' + sedimentTypeDict[feature.properties.hazardAreaType].name
-                });
-                infowindow.open(map, marker);
-              });
-            });
-              
-            //features = features.concat(map.data.addGeoJson(res));
-            //map.data.setStyle(styleSedimentFeature());
-            callback(null, null);
-          },
-          'json'
-        ).error(function(e){
-           callback(e.responseText, null);
-        });
+          );
+        };
       }
 
       /**
        * 洪水想定区域の取得
        */
-      function getExpectedFloodAarea(callback) {
-        util.getJson(
-          '/' + getAppName() + '/json/get_expected_flood_area',
-          {
-            swlat : swlat,
-            swlng : swlng,
-            nelat : nelat,
-            nelng : nelng,
-            lang: header.getLang()
-          },
-          function(err, data) {
-            if (err) {
-              callback(err, null);
-              return;
-            }
-            dataFeatures = dataFeatures.concat(map.data.addGeoJson(data.geojson));
-            attribute = data.attribute;
+      function createGetExpectedFloodAreaFnc(swlat, swlng, nelat, nelng) {
+        return function(callback) {
+          util.getJson(
+            '/' + getAppName() + '/json/get_expected_flood_area',
+            {
+              swlat : swlat,
+              swlng : swlng,
+              nelat : nelat,
+              nelng : nelng,
+              lang: header.getLang()
+            },
+            function(err, data) {
+              if (err) {
+                callback(err, null);
+                return;
+              }
+              dataFeatures = dataFeatures.concat(map.data.addGeoJson(data.geojson));
+              attribute = data.attribute;
 
-            var styleFeature = function() {
-              return function(feature) {
-                return {
-                  strokeWeight : 0.2,
-                  strokeColor : waterDepthDict[feature.getProperty('waterDepth')].color,
-                  fillColor: waterDepthDict[feature.getProperty('waterDepth')].color,
-                  fillOpacity: 0.5
+              var styleFeature = function() {
+                return function(feature) {
+                  return {
+                    strokeWeight : 0.2,
+                    strokeColor : waterDepthDict[feature.getProperty('waterDepth')].color,
+                    fillColor: waterDepthDict[feature.getProperty('waterDepth')].color,
+                    fillOpacity: 0.5
+                  };
                 };
-              };
+              }
+              map.data.setStyle(styleFeature());
+              callback(null, null);
+            },
+            function() {
+              // 実行前
+            },
+            function() {
+              // 終了時
             }
-            map.data.setStyle(styleFeature());
-            callback(null, null);
-          },
-          function() {
-            // 実行前
-          },
-          function() {
-            // 終了時
-          }
-        );
+          );
+        };
       }
 
+      // 一気に大量のデータを実行するとサーバー側のメモリがパンクするので、こまめにわけてリクエストする.
       var tasksDict = {
-        'flood_data' : [getExpectedFloodAarea],
-        'gust_data' : null,
-        'sediment_data' : [
-          getSedimentDisasterHazardAreaSurface,
-          //getSedimentDisasterHazardAreaLine,
-          //getSedimentDisasterHazardAreaPoint
-        ]
+        'flood_data' : [], //getExpectedFloodAarea],
+        'gust_data' : [],
+        'sediment_data' : []
       };
+      var targetRange = [33.42294614050342, 130.02156319824212, 33.88989773419436, 130.57087960449212];
+      var rangeDivCnt = 2;
+      var perLat = (targetRange[2] - targetRange[0]) / rangeDivCnt;
+      var perLng = (targetRange[3] - targetRange[1]) / rangeDivCnt;
+      var postRange = [];
+      var lat = targetRange[0];
+      var lng = targetRange[1];
+      for (var i = 0 ; i < rangeDivCnt; ++i) {
+        lat = targetRange[0];
+        for (var j = 0 ; j < rangeDivCnt; ++j) {
+          tasksDict['flood_data'].push(
+            createGetExpectedFloodAreaFnc(lat, lng, lat+perLat, lng + perLng)
+          )
+          tasksDict['sediment_data'].push(
+            createGetSedimentDisasterHazardAreaSurfaceFnc(lat, lng, lat+perLat, lng + perLng)
+          )
+          lat = lat + perLat;
+        }
+        lng = lng + perLng;
+      }
       var tasks = tasksDict[val];
       if (!tasks) {
         return;
