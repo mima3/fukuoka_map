@@ -18,8 +18,7 @@ $(function() {
     var map = new google.maps.Map(document.getElementById("map_canvas"), opts);
     var markerList = [];
     var dataFeatures = [];
-    var dataMarkers = [];
-
+    var facilities;
     var startMarker = new google.maps.Marker({
       position : new google.maps.LatLng(33.6015669, 130.395785),
       title: "Start",
@@ -140,6 +139,31 @@ $(function() {
       
     });
 
+    // 土砂災害用スタイルの関数
+    var styleSedimentFeature = function() {
+      return function(feature) {
+        return {
+          strokeWeight : 0.2,
+          strokeColor : sedimentTypeDict[feature.getProperty('hazardAreaType')].strokeColor,
+          fillColor: sedimentTypeDict[feature.getProperty('hazardAreaType')].fillColor,
+          fillOpacity: 0.9
+        };
+      };
+    };
+    var styleExpectedFoodFeature = function() {
+      return function(feature) {
+        return {
+          strokeWeight : 0.2,
+          strokeColor : waterDepthDict[feature.getProperty('waterDepth')].strokeColor,
+          fillColor: waterDepthDict[feature.getProperty('waterDepth')].fillColor,
+          fillOpacity: 0.9
+        };
+      };
+    };
+    var dataFeatureCache = {
+      'flood_data' : {cache:null, styleFnc:styleExpectedFoodFeature}, 
+      'sediment_data' : {cache:null, styleFnc:styleSedimentFeature}
+    };
 
     /**
      * 災害データの表示切替
@@ -151,12 +175,21 @@ $(function() {
       for (var i = 0; i < dataFeatures.length; i++) {
         map.data.remove(dataFeatures[i]);
       }
-      for (var i = 0; i < dataMarkers.length; ++i) {
-        dataMarkers[i].setMap(null);
-      }
       map.data.setStyle(null);
       dataFeatures = [];
-      dataMarkers = [];
+      if (!dataFeatureCache[val]) {
+        return;
+      }
+
+      if (dataFeatureCache[val].cache) {
+        dataFeatures = dataFeatureCache[val].cache;
+        map.data.setStyle(dataFeatureCache[val].styleFnc());
+        for (var i = 0; i < dataFeatures.length; i++) {
+          map.data.add(dataFeatures[i]);
+        }
+        return;
+      }
+
       var latlngBounds = map.getBounds();
       var swLatlng = latlngBounds.getSouthWest();
       var swlat = swLatlng.lat();
@@ -164,18 +197,6 @@ $(function() {
       var neLatlng = latlngBounds.getNorthEast();
       var nelat = neLatlng.lat();
       var nelng = neLatlng.lng();
-
-      // 土砂災害用
-      var styleSedimentFeature = function() {
-        return function(feature) {
-          return {
-            strokeWeight : 0.2,
-            strokeColor : sedimentTypeDict[feature.getProperty('hazardAreaType')].strokeColor,
-            fillColor: sedimentTypeDict[feature.getProperty('hazardAreaType')].fillColor,
-            fillOpacity: 0.9
-          };
-        };
-      };
 
       /**
        * 土砂災害危険個所（面）
@@ -199,6 +220,7 @@ $(function() {
               }
               dataFeatures = dataFeatures.concat(map.data.addGeoJson(data));
               map.data.setStyle(styleSedimentFeature());
+              dataFeatureCache[val].cache = dataFeatures;
               callback(null, null);
             },
             function() {
@@ -231,19 +253,9 @@ $(function() {
                 return;
               }
               dataFeatures = dataFeatures.concat(map.data.addGeoJson(data.geojson));
-              attribute = data.attribute;
+              dataFeatureCache[val].cache = dataFeatures;
 
-              var styleFeature = function() {
-                return function(feature) {
-                  return {
-                    strokeWeight : 0.2,
-                    strokeColor : waterDepthDict[feature.getProperty('waterDepth')].strokeColor,
-                    fillColor: waterDepthDict[feature.getProperty('waterDepth')].fillColor,
-                    fillOpacity: 0.9
-                  };
-                };
-              }
-              map.data.setStyle(styleFeature());
+              map.data.setStyle(styleExpectedFoodFeature());
               callback(null, null);
             },
             function() {
@@ -263,7 +275,7 @@ $(function() {
         'sediment_data' : []
       };
       var targetRange = [33.42294614050342, 130.02156319824212, 33.88989773419436, 130.57087960449212];
-      var rangeDivCnt = 2;
+      var rangeDivCnt = 3;
       var perLat = (targetRange[2] - targetRange[0]) / rangeDivCnt;
       var perLng = (targetRange[3] - targetRange[1]) / rangeDivCnt;
       var postRange = [];
@@ -272,10 +284,14 @@ $(function() {
       for (var i = 0 ; i < rangeDivCnt; ++i) {
         lat = targetRange[0];
         for (var j = 0 ; j < rangeDivCnt; ++j) {
-          tasksDict['flood_data'].push(
+          var ix = j;
+          if (lat <= nelat && nelat <= lat+perLat && lng <= nelng && nelng <= lng + perLng) {
+            ix = 0;
+          }
+          tasksDict['flood_data'].splice(ix, 0,
             createGetExpectedFloodAreaFnc(lat, lng, lat+perLat, lng + perLng)
           )
-          tasksDict['sediment_data'].push(
+          tasksDict['sediment_data'].splice(ix, 0,
             createGetSedimentDisasterHazardAreaSurfaceFnc(lat, lng, lat+perLat, lng + perLng)
           )
           lat = lat + perLat;
@@ -342,6 +358,7 @@ $(function() {
       '地区避難場所' : '/' + getAppName() + '/img/shelter_area.png',
       '広域避難場所' : '/' + getAppName() + '/img/shelter_area.png'
     };
+    
     function createMarker(key, obj) {
       var marker;
       if (obj['http://teapot.bodic.org/predicate/緯度'] &&
@@ -503,7 +520,26 @@ $(function() {
       });
     }
     $('#selShelterType').change(function() {
-      loadShelter();
+      var val = $('#selShelterType').val();
+      for (var i = 0; i < markerList.length; ++i) {
+        markerList[i].setMap(null);
+      }
+      markerList = [];
+      if (!val) {
+        return;
+      }
+      for (var key in facilities) {
+        if (val.indexOf(facilities[key]['http://teapot.bodic.org/predicate/避難所情報'].value) == -1) {
+          continue;
+        }
+        var marker = createMarker(key, facilities[key]);
+        if (marker) {
+          marker.setMap(map);
+          markerList.push(marker);
+        } else {
+          console.log('座標情報なし' , key);
+        }
+      }
     });
     loadShelter();
   });

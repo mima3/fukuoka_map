@@ -77,20 +77,20 @@
   <h1>{$label['title']}</h1>
   <div id = "left_area">
     <div>
-      <div>
-        {$label['shelter_type']}:<select id="selShelterType" multiple="multiple">
+      <p>
+        {$label['shelter_type']}:<select id="selShelterType" style="width:100%;" multiple="multiple">
             {foreach from=$shelterType key=key item=item}
                 <option value="{$key}"  img="{$item['image']}" selected>{$item['title']}</option>
             {/foreach}
         </select>
-      </div>
-      <div>
-        {$label['disaster_data']}:<select id="selDisasterData">
+      </p>
+      <p>
+        {$label['disaster_data']}:<select id="selDisasterData" style="width:100%;" >
             <option value="no_data">{$label['no_data']}</option>
             <option value="flood_data">{$label['flood_data']}</option>
             <option value="sediment_data">{$label['sediment_data']}</option>
         </select>
-      </div>
+      </p>
       <button id="btnCurPos">{$label['curpos']}</button>
       <button id="btnCurPosCenter">{$label['center']}</button>
     </div>
