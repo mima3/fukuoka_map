@@ -141,7 +141,6 @@ $(function() {
     });
 
 
-
     /**
      * 災害データの表示切替
      */
@@ -451,7 +450,7 @@ $(function() {
         }
       );
     }
-    $('#selShelterType').change(function() {
+    function loadShelter() {
       for (var i = 0; i < markerList.length; ++i) {
         markerList[i].setMap(null);
       }
@@ -502,6 +501,10 @@ $(function() {
           }
         }
       });
+    }
+    $('#selShelterType').change(function() {
+      loadShelter();
     });
+    loadShelter();
   });
 });

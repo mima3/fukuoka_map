@@ -80,7 +80,7 @@
       <div>
         {$label['shelter_type']}:<select id="selShelterType" multiple="multiple">
             {foreach from=$shelterType key=key item=item}
-                <option value="{$key}"  img="{$item['image']}">{$item['title']}</option>
+                <option value="{$key}"  img="{$item['image']}" selected>{$item['title']}</option>
             {/foreach}
         </select>
       </div>
