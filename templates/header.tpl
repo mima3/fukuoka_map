@@ -18,7 +18,7 @@
 
   <!--スタートページへのリンク-->
   <div class="headItem {if $rtl}rtl{/if}">
-    <a href="/{$appName}?lang={$lang}" >
+    <a href="/{$appName}/?lang={$lang}" >
       <img src="/{$appName}/img/home.png" class="tooltip btn_icon" title="{$headLabel['start']}" alt=""></img>
     </a>
   </div>
