@@ -152,6 +152,14 @@ $app->get('/json/get_shelter', function() use ($app, $modules, $models, $lang) {
 
 
 /**
+ * 避難所の建物情報の取得
+ */
+$app->get('/json/get_shelter_building', function() use ($app, $modules, $models, $lang) {
+    $ctrl = new \Controller\Json\GetShelterBuildingController($app, $modules, $models);
+    $ctrl->route();
+});
+
+/**
  * 病院情報の取得
  */
 $app->get('/json/get_hospital', function() use ($app, $modules, $models, $lang) {

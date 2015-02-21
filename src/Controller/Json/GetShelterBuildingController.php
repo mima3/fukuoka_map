@@ -2,9 +2,9 @@
 namespace Controller\Json;
 
 /**
- * 避難所の一覧を取得する
+ * 避難所の建物一覧を取得する
  */
-class GetShelterController extends \Controller\ControllerBase
+class GetShelterBuildingController extends \Controller\ControllerBase
 {
     public function route()
     {
@@ -12,14 +12,15 @@ class GetShelterController extends \Controller\ControllerBase
         if ($this->app->request->params('shelter_type')) {
             $shelter_type = $this->app->request->params('shelter_type');
         }
-        $ret = $this->getShelter($shelter_type);
+        $ret = $this->getShelterBuilding($shelter_type);
         $this->sendJsonData($ret['resultCode'], $ret['errorMsg'], $ret['contents']);
         return;
     }
 
-    public function getShelter($shelter_type) {
+    public function getShelterBuilding($shelter_type )
+    {
         $db = $this->models['ApiCacheModel'];
-        $key = 'GetShelter_Fukuoka' . implode('_', $shelter_type);
+        $key = 'GetShelterBuilding_Fukuoka';
         $ret = $db->getContents($key);
         if (!$ret) {
             $shlFilter = '';
@@ -33,22 +34,22 @@ class GetShelterController extends \Controller\ControllerBase
             }
 
             $query = new \MyLib\TeapotQuery($this->modules['TeapotCtrl']);
-            $query->columns(array('?s', '?p', '?o'))
+            $query->columns(array('?facility', '?building', '?p', '?o'))
                 ->distinct()
-                ->where('?s', '<http://teapot.bodic.org/predicate/避難所情報>', '?x')
-                ->where('?s', '?p', '?o')
-                ->filter('!isBlank(?o)')
+                ->where('?facility', '<http://teapot.bodic.org/predicate/避難所情報>', '?a')
+                ->where('?building', '<http://teapot.bodic.org/predicate/containedIn>', '?facility')
+                ->where('?building', '<http://teapot.bodic.org/predicate/種別>', '?c')
+                ->where('?building', '?p', '?o')
                 ->filter($shlFilter)
+                ->filter('?c ="建物"')
                 ->filter('
                    ?p = <http://www.w3.org/2000/01/rdf-schema#label> ||
-                   ?p = <http://teapot.bodic.org/predicate/種別> ||
-                   ?p = <http://teapot.bodic.org/predicate/避難所情報> ||
-                   ?p = <http://teapot.bodic.org/predicate/緯度> ||
-                   ?p = <http://teapot.bodic.org/predicate/経度> ||
-                   ?p = <http://teapot.bodic.org/predicate/種別> ||
-                   ?p = <http://teapot.bodic.org/predicate/郵便番号> ||
-                   ?p = <http://teapot.bodic.org/predicate/addressClean>')
-                ->orderby('?s ?p');
+                   ?p = <http://teapot.bodic.org/predicate/構造> ||
+                   ?p = <http://teapot.bodic.org/predicate/地上階数> ||
+                   ?p = <http://teapot.bodic.org/predicate/地下階数> ||
+                   ?p = <http://teapot.bodic.org/predicate/延床面積>
+                ')
+                ->orderby('?facility ?building');
             $ret = $query->execute();
             if ($ret['resultCode'] == \MyLib\TeapotCtrl::RESULT_CODE_OK) {
                 $ret += array('updated'=>time());

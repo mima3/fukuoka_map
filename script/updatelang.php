@@ -39,6 +39,11 @@ function updateTran($app, $models,$jsonCtrl ,$lang) {
   $ctrl->route();
   $trans->updateCacheDb();
 
+  echo $lang . "GetShelterBuildingController......\n";
+  $ctrl = new \Controller\Json\GetShelterBuildingController($app, $modules, $models);
+  $ctrl->route();
+  $trans->updateCacheDb();
+
   echo $lang . "GetHospitalController......\n";
   $param = [
     "こう門科",

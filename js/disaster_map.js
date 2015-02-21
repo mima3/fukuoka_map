@@ -40,33 +40,46 @@ $(function() {
     directionsDisplay.setMap(map);
 
     var waterDepthDict = {
-      11: {name:'0～0.5ｍ未満', color:'#ccccff'},
-      12: {name:'0.5～1.0ｍ未満', color:'#aaaaff'},
-      13: {name:'1.0～2.0ｍ未満', color:'#8888ff'},
-      14: {name:'2.0～5.0ｍ未満', color:'#4444ff'},
-      15: {name:'5.0ｍ以上', color:'#0000ff'},
+      11: {name:'0～0.5ｍ未満', strokeColor:'#ccccff', fillColor:'#ccccff'},
+      12: {name:'0.5～1.0ｍ未満', strokeColor:'#aaaaff', fillColor:'#aaaaff'},
+      13: {name:'1.0～2.0ｍ未満', strokeColor:'#8888ff', fillColor:'#8888ff'},
+      14: {name:'2.0～5.0ｍ未満', strokeColor:'#4444ff', fillColor:'#4444ff'},
+      15: {name:'5.0ｍ以上', strokeColor:'#0000ff', fillColor:'#0000ff'},
 
-      21: {name:'0～0.5ｍ未満', color:'#ccccff'},
-      22: {name:'0.5～1.0ｍ未満', color:'#aaaaff'},
-      23: {name:'1.0～2.0ｍ未満', color:'#8888ff'},
-      24: {name:'2.0～3.0ｍ未満', color:'#6666ff'},
-      25: {name:'3.0～4.0ｍ未満', color:'#4444ff'},
-      26: {name:'4.0～5.0ｍ未満', color:'#2222ff'},
-      27: {name:'5.0ｍ以上', color:'#0000ff'}
+      21: {name:'0～0.5ｍ未満', strokeColor:'#ccccff', fillColor:'#ccccff'},
+      22: {name:'0.5～1.0ｍ未満', strokeColor:'#aaaaff', fillColor:'#aaaaff'},
+      23: {name:'1.0～2.0ｍ未満', strokeColor:'#8888ff', fillColor:'#8888ff'},
+      24: {name:'2.0～3.0ｍ未満', strokeColor:'#6666ff', fillColor:'#6666ff'},
+      25: {name:'3.0～4.0ｍ未満', strokeColor:'#4444ff', fillColor:'#4444ff'},
+      26: {name:'4.0～5.0ｍ未満', strokeColor:'#2222ff', fillColor:'#2222ff'},
+      27: {name:'5.0ｍ以上', strokeColor:'#0000ff', fillColor:'#0000ff'}
     };
+    for (var k in waterDepthDict) {
+      var t = $('#message').find('#waterDepth' + k).text();
+      if (t) {
+        var html = $('#tmplExample').render({color:waterDepthDict[k].fillColor, message:t});
+        $('#example_flood_data').append(html);
+      }
+    }
+    
     var sedimentTypeDict = {
-      1:{name:'土石流危険渓流', color:'#ff0000'},
-      2:{name:'土石流危険区域', color:'#ff0000'},
-      3:{name:'土石流危険渓流主流路', color:'#ff0000'},
-      4:{name:'土石流危険渓流氾濫開始点', color:'#ff0000'},
-      5:{name:'急傾斜地崩壊危険箇所', color:'#FFA500'},
-      6:{name:'急傾斜地崩壊危険区域', color:'#FFA500'},
-      7:{name:'地すべり危険箇所', color:'#A52A2A'},
-      8:{name:'地すべり危険区域', color:'#A52A2A'},
-      9:{name:'地すべり氾濫区域', color:'#A52A2A'},
-      10:{name:'地すべり堪水域', color:'#FFA500'},
-      11:{name:'雪崩危険箇所', color:'#0000ff'}
+      1:{name:'土石流危険渓流', strokeColor:'#000000', fillColor:'#ff8000'},
+      2:{name:'土石流危険区域', strokeColor:'#000000', fillColor:'#ff00e4'},
+      5:{name:'急傾斜地崩壊危険箇所', strokeColor:'#FFA500', fillColor:'#27104f'},
+      6:{name:'急傾斜地崩壊危険区域', strokeColor:'#FFA500', fillColor:'#b491b2'},
+      7:{name:'地すべり危険箇所', strokeColor:'#273c9c', fillColor:'#273c9c'},
+      8:{name:'地すべり危険区域', strokeColor:'#b32e49', fillColor:'#b32e49'},
+      9:{name:'地すべり氾濫区域', strokeColor:'#2dc8a9', fillColor:'#2dc8a9'},
+      10:{name:'地すべり堪水域', strokeColor:'#35b24e', fillColor:'#35b24e'},
+      11:{name:'雪崩危険箇所', strokeColor:'#000000', fillColor:'#e1e1e1'}
     };
+    for (var k in sedimentTypeDict) {
+      var t = $('#message').find('#sedimentType' + k).text();
+      if (t) {
+        var html = $('#tmplExample').render({color:sedimentTypeDict[k].fillColor, message:t});
+        $('#example_sediment_data').append(html);
+      }
+    }
 
     // GoogleMapの表示位置変更
     google.maps.event.addListener(map, 'bounds_changed', function() {
@@ -110,15 +123,32 @@ $(function() {
     });
 
     $('#selDisasterData').select2({
-      width: '300px' ,
+      width: 'resolve' ,
       dropdownAutoWidth: true
     });
+
+    function formatSelShelterType(state) {
+      if (!state.id) return state.text; // optgroup
+      return "<img style='vertical-align: middle' class='flag' width='20' height='20' src='" + $(state.element[0]).attr('img') + "'/>" + state.text;
+    }
+    $('#selShelterType').select2({
+      width: 'resolve' ,
+      escapeMarkup: function(m) { return m; },
+      formatResult: formatSelShelterType,
+      formatSelection: formatSelShelterType,
+      dropdownAutoWidth: true,
+      
+    });
+
+
 
     /**
      * 災害データの表示切替
      */
     $('#selDisasterData').change(function() {
+      $('.example_area').hide();
       var val = $('#selDisasterData').val();
+      $('#example_' + val).slideDown(200);
       for (var i = 0; i < dataFeatures.length; i++) {
         map.data.remove(dataFeatures[i]);
       }
@@ -141,9 +171,9 @@ $(function() {
         return function(feature) {
           return {
             strokeWeight : 0.2,
-            strokeColor : sedimentTypeDict[feature.getProperty('hazardAreaType')].color,
-            fillColor: sedimentTypeDict[feature.getProperty('hazardAreaType')].color,
-            fillOpacity: 0.5
+            strokeColor : sedimentTypeDict[feature.getProperty('hazardAreaType')].strokeColor,
+            fillColor: sedimentTypeDict[feature.getProperty('hazardAreaType')].fillColor,
+            fillOpacity: 0.9
           };
         };
       };
@@ -208,9 +238,9 @@ $(function() {
                 return function(feature) {
                   return {
                     strokeWeight : 0.2,
-                    strokeColor : waterDepthDict[feature.getProperty('waterDepth')].color,
-                    fillColor: waterDepthDict[feature.getProperty('waterDepth')].color,
-                    fillOpacity: 0.5
+                    strokeColor : waterDepthDict[feature.getProperty('waterDepth')].strokeColor,
+                    fillColor: waterDepthDict[feature.getProperty('waterDepth')].fillColor,
+                    fillOpacity: 0.9
                   };
                 };
               }
@@ -273,6 +303,9 @@ $(function() {
       });
     });
 
+    /**
+     * Startマークを中央に
+     */
     $('#btnCurPosCenter').button().click(function(){
       var latlngBounds = map.getBounds();
       startMarker.setPosition(latlngBounds.getCenter());
@@ -381,9 +414,11 @@ $(function() {
      * 避難所の情報を取得
      */
     function getShelter(callback) {
+      var sel = $('#selShelterType').val();
       util.getJson(
         '/' + getAppName() + '/json/get_shelter',
         {
+          shelter_type: sel,
           lang: header.getLang()
         },
         function(err, data) {
@@ -397,32 +432,76 @@ $(function() {
         }
       );
     }
-    var tasks = [
-      getShelter
-    ];
-    $.blockUI({ message: '<img src="/' + getAppName() + '/img/loading.gif" />' });
-    async.parallel(tasks, function(err, res) {
-      console.log(err, res);
-      $.unblockUI();
-      if (err) {
-        $.msgBox({
-          title: "Error",
-          content: err,
-          type: "error",
-          buttons: [{ value: "Ok" }],
-        });
+    function getShelterBuilding(callback) {
+      var sel = $('#selShelterType').val();
+      util.getJson(
+        '/' + getAppName() + '/json/get_shelter_building',
+        {
+          shelter_type: sel,
+          lang: header.getLang()
+        },
+        function(err, data) {
+          callback(err, data);
+        },
+        function() {
+          // 実行前
+        },
+        function() {
+          // 終了時
+        }
+      );
+    }
+    $('#selShelterType').change(function() {
+      for (var i = 0; i < markerList.length; ++i) {
+        markerList[i].setMap(null);
+      }
+      markerList = [];
+
+      var sel = $('#selShelterType').val();
+      if (!sel) {
         return;
       }
-      facilities = teapot.convertObject(res[0]);
-      for (var key in facilities) {
-        var marker = createMarker(key, facilities[key]);
-        if (marker) {
-          marker.setMap(map);
-          markerList.push(marker);
-        } else {
-          console.log('座標情報なし' , key);
+      var tasks = [
+        getShelter,
+        getShelterBuilding
+      ];
+      $.blockUI({ message: '<img src="/' + getAppName() + '/img/loading.gif" />' });
+      async.parallel(tasks, function(err, res) {
+        console.log(err, res);
+        $.unblockUI();
+        if (err) {
+          $.msgBox({
+            title: "Error",
+            content: err,
+            type: "error",
+            buttons: [{ value: "Ok" }],
+          });
+          return;
         }
-      }
+        facilities = teapot.convertObject(res[0]);
+        var building = teapot.convertObject(res[1], null,  ['facility', 'building', 'p', 'o']);
+        for (var k in building) {
+          if (!facilities[k]) {
+            continue;
+          }
+          for (var b in building[k]) {
+            if (!facilities[k]['building']) {
+              facilities[k]['building'] = {};
+            }
+            facilities[k]['building'][b] = building[k][b];
+          }
+        }
+
+        for (var key in facilities) {
+          var marker = createMarker(key, facilities[key]);
+          if (marker) {
+            marker.setMap(map);
+            markerList.push(marker);
+          } else {
+            console.log('座標情報なし' , key);
+          }
+        }
+      });
     });
   });
 });
