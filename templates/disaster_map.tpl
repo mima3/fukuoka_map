@@ -49,7 +49,7 @@
         </tbody>
       </table>
     {{/if}}
-    <span>{/literal}{$label['distance']}{literal}</span><span id="legs_{{:prefix}}"></td>
+    <span>{/literal}{$label['distance']}{literal}</span><span id="legs_{{:prefix}}"></span>
 
     <button id="btn_{{:prefix}}">{/literal}{$label['route_search']}{literal}</button>
     <button id="btnClose_{{:prefix}}">Close</button>
