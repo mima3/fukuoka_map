@@ -4,51 +4,18 @@
 $(function() {
   $(document).ready(function() {
     header.initialize();
-    var appstore = header.getAppStore();
-    console.log(appstore);
-    if (!appstore.mapLocate) {
-      appstore.mapLocate = {
-        lat : 33.6015669,
-        lng : 130.395785,
-        zoom: 11
-      };
-    }
-    console.log(latlng);
 
-    var latlng = new google.maps.LatLng(appstore.mapLocate.lat, appstore.mapLocate.lng);
-    var opts = {
-      zoom: appstore.mapLocate.zoom,
-      center: latlng,
-      //scrollwheel: false,
-      //disableDoubleClickZoom: true,
-      //scaleControl: false,
-      //zoomControl : false,
-      //streetViewControl : false,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    header.appStore
-    var map = new google.maps.Map(document.getElementById("map_canvas"), opts);
+    var mapCtrl = new MapCtrl('map_canvas', 
+      header.getAppStore(),
+      function() {
+        header.saveAppStore();
+      }
+    );
+    var map = mapCtrl.getMapObj();
     var markerList = [];
     var dataFeatures = [];
     var facilities;
-    var startMarker = new google.maps.Marker({
-      position : new google.maps.LatLng(33.6015669, 130.395785),
-      title: "Start",
-      draggable : true,
-      icon : '/' + getAppName() + '/img/start_marker.png'
-    });
-    startMarker.setMap(map);
 
-    rendererOptions = {
-      draggable: false,
-      preserveViewport:false,
-      markerOptions : {
-        visible : false
-      }
-    };
-    var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
-    var directionsService = new google.maps.DirectionsService();
-    directionsDisplay.setMap(map);
 
     var waterDepthDict = {
       11: {name:'0～0.5ｍ未満', strokeColor:'#ccccff', fillColor:'#ccccff'},
@@ -92,25 +59,10 @@ $(function() {
       }
     }
 
-    // GoogleMapの表示位置変更
-    google.maps.event.addListener(map, 'bounds_changed', function() {
-      var latlngBounds = map.getBounds();
-      var center = latlngBounds.getCenter();
-      if (appstore.mapLocate) {
-        appstore.mapLocate = {
-          lat : center.lat(),
-          lng : center.lng(),
-          zoom: map.zoom
-        };
-        header.saveAppStore();
-      }
-    });
-
     /**
      * 地図をクリック
      */
     map.data.addListener('click', function(e) {
-      console.log(e.feature);
       var val = $('#selDisasterData').val();
       if (!val) {
         return;
@@ -119,10 +71,6 @@ $(function() {
         console.log(e.feature.getProperty('waterDepth'));
         return;
       }
-      /*
-      alert(areaType[e.feature.getProperty('hazardAreaType')].name + '\n' + e.feature.getProperty('remarks'));
-      console.log(areaType[e.feature.getProperty('hazardAreaType')].name, e.feature.getProperty('remarks'));
-      */
     });
 
     $('#selDisasterData').select2({
@@ -326,36 +274,16 @@ $(function() {
      * Startマークを中央に
      */
     $('#btnCurPosCenter').button().click(function(){
-      var latlngBounds = map.getBounds();
-      startMarker.setPosition(latlngBounds.getCenter());
+      mapCtrl.moveStartMarkerToCenter();
     });
+
+    /**
+     * 現在位置にスタートマーカを移動する.
+     */
     $('#btnCurPos').button().click(function(){
-      // 現在地を取得する.
-      if (!navigator.geolocation) {
-        $.msgBox({
-          title: "Error",
-          content: 'Not support geolocation.',
-          type: "error",
-          buttons: [{ value: "Ok" }],
-        });
-        return;
-      }
-      navigator.geolocation.getCurrentPosition(
-        function(position) {
-          var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-          map.panTo(pos);
-          startMarker.setPosition(pos);
-        } , 
-        function(error) {
-          $.msgBox({
-            title: "Error",
-            content: error.message,
-            type: "error",
-            buttons: [{ value: "Ok" }],
-          });
-        }
-      );
+      mapCtrl.moveStartMarkerToCurPos();
     });
+
     var iconDic = {
       '収容避難所' : '/' + getAppName() + '/img/shelter_home.png',
       '一時避難所' : '/' + getAppName() + '/img/shelter_temp.png',
@@ -397,30 +325,18 @@ $(function() {
             });
             $('#btn_' + prefix).button().click(function() {
               console.log('click', key);
-              var request = {
-                origin: startMarker.position,
-                destination: pos,
-                travelMode: google.maps.DirectionsTravelMode.DRIVING,
-                unitSystem: google.maps.DirectionsUnitSystem.METRIC,
-                optimizeWaypoints: true,
-                avoidHighways: false,
-                avoidTolls: false
-              };
-              directionsService.route(request, function(response, status){
-                console.log('directionsService', response, status);
-                if (status != google.maps.DirectionsStatus.OK){
-                  console.log(status);
+              mapCtrl.findRoute(pos, function(err, res) {
+                if (err) {
                   $.msgBox({
                     title: "Error",
-                    content: 'directionService:'+ status,
+                    content: err,
                     type: "error",
                     buttons: [{ value: "Ok" }],
                   });
                   return;
                 }
-                directionsDisplay.setDirections(response);
                 $('#legs_' + prefix).empty();
-                var legs = response.routes[0].legs[0];
+                var legs = res.routes[0].legs[0];
                 $('#legs_' + prefix).html('<p>' + legs.distance.text + ' '  + legs.duration.text + '</p>');
               });
             });

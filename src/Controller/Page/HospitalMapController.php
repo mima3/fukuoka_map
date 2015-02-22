@@ -50,7 +50,8 @@ class HospitalMapController extends \Controller\ControllerBase
             'curpos' => $tran->translator('現在地'),
             'medical_subject' => $tran->translator('診療科目'),
             'search' => $tran->translator('検索'),
-            'center' => $tran->translator('開始位置を画面中央へ'),
+            'start_pos' => $tran->translator('開始位置'),
+            'center' => $tran->translator('画面中央'),
             'name' => $tran->translator('名称'),
             'kind' => $tran->translator('種別'),
             'postcode' => $tran->translator('郵便番号'),
@@ -59,7 +60,9 @@ class HospitalMapController extends \Controller\ControllerBase
             'phoneno' => $tran->translator('電話番号'),
             'bedcount' => $tran->translator('病床数合計'),
             'distance' => $tran->translator('距離'),
-            'route_search' => $tran->translator('ルート検索')
+            'route_search' => $tran->translator('ルート検索'),
+            'data_ref' => $tran->translator('このページは下記のデータから作成されています。'),
+            'teapot' => $tran->translator('共施設等情報のオープンデータ実証 開発者サイト')
         );
         $tempData = array(
             'appName' => $this->app->getName(),

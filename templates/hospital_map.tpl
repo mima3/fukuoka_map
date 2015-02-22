@@ -10,6 +10,7 @@
   {include file='common_include.tpl'}
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&language={$gmaplang}"></script>
   <script type="text/javascript" src="/{$appName}/js/teapot.js?{($smarty.now|date_format:"%Y%m%d%H%M%S")}"></script>
+  <script type="text/javascript" src="/{$appName}/js/map_ctrl.js?{($smarty.now|date_format:"%Y%m%d%H%M%S")}"></script>
   <script type="text/javascript" src="/{$appName}/js/hospital_map.js?{($smarty.now|date_format:"%Y%m%d%H%M%S")}"></script>
   <!-- マーカーのInfoWindowのテンプレート -->
   <script id="tmplInfoWindow" type="text/x-jsrender">
@@ -61,17 +62,30 @@
 {include file='header.tpl'}
 <div id="contents" {if $rtl}class="rtl"{/if}>
   <h1>{$label['title']}</h1>
-  <div>
-    {$label['medical_subject']}:<select id="selMedicalSubject" multiple="multiple">
-        {foreach from=$medicalSubjects key=key item=item}
-            <option value="{$key}">{$item}</option>
-        {/foreach}
-    </select>
-    <button id="btnSearch">{$label['search']}</button>
-    <button id="btnCurPos">{$label['curpos']}</button>
-    <button id="btnCurPosCenter">{$label['center']}</button>
+  <div id = "left_area">
+    <div>
+      <p>{$label['medical_subject']}:</p>
+      <select id="selMedicalSubject" multiple="multiple">
+          {foreach from=$medicalSubjects key=key item=item}
+              <option value="{$key}">{$item}</option>
+          {/foreach}
+      </select>
+      <button id="btnSearch">{$label['search']}</button>
+    </div>
+    <div>
+      <p>{$label['start_pos']}</p>
+      <button id="btnCurPos">{$label['curpos']}</button>
+      <button id="btnCurPosCenter">{$label['center']}</button>
+    </div>
   </div>
-  <div id="map_canvas"></div>
+  <div id = "main_area">
+    <div id="map_canvas"></div>
+  </div>
+  <div  style="clear:both;"></div>
+  <p>{$label['data_ref']}</p>
+  <ul>
+    <li><a href="http://teapot.bodic.org/">{$label['teapot']}</a></li>
+  </ul>
 </div>
 </body>
 </html>

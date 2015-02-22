@@ -60,8 +60,12 @@ class DisasterMapController extends \Controller\ControllerBase
             'gust_data' => $tran->translator('竜巻等の突風データ'),
             'sediment_data' => $tran->translator('土砂災害危険箇所データ'),
             'search' => $tran->translator('検索'),
-            'center' => $tran->translator('開始位置を画面中央へ'),
-            'route_search' => $tran->translator('ルート検索')
+            'start_pos' => $tran->translator('開始位置'),
+            'center' => $tran->translator('画面中央'),
+            'route_search' => $tran->translator('ルート検索'),
+            'data_ref' => $tran->translator('このページは下記のデータから作成されています。'),
+            'kokudosuji' => $tran->translator('国土数値情報'),
+            'teapot' => $tran->translator('共施設等情報のオープンデータ実証 開発者サイト')
         );
         $tempData = array(
             'appName' => $this->app->getName(),
