@@ -2,6 +2,7 @@
 namespace MyLib;
 
 /**
+ * 国土数値情報を取得するAPIを実行する
  */
 class KokudoCtrl extends \MyLib\ApiCtrlBase
 {
@@ -17,6 +18,9 @@ class KokudoCtrl extends \MyLib\ApiCtrlBase
         parent::__construct();
     }
 
+    /**
+     * 浸水想定区域のデータの取得
+     */
     public function getExpectedFloodArea($swlat, $swlng, $nelat, $nelng)
     {
         $param = array(
@@ -28,6 +32,9 @@ class KokudoCtrl extends \MyLib\ApiCtrlBase
         return parent::get($this->endPoint . '/json/get_expected_flood_area_by_geometry', $param, 0);
     }
 
+    /**
+     * 土砂災害危険箇所データの取得
+     */
     public function getSedimentDisasterHazardArea($swlat, $swlng, $nelat, $nelng)
     {
         $param = array(
@@ -38,5 +45,4 @@ class KokudoCtrl extends \MyLib\ApiCtrlBase
         );
         return parent::get($this->endPoint . '/json/get_sediment_disaster_hazard_area_surface_by_geometry', $param, 0);
     }
-
 }

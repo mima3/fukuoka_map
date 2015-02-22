@@ -17,7 +17,7 @@ class GetShelterBuildingController extends \Controller\ControllerBase
         return;
     }
 
-    public function getShelterBuilding($shelter_type )
+    public function getShelterBuilding($shelter_type)
     {
         $db = $this->models['ApiCacheModel'];
         $key = 'GetShelterBuilding_Fukuoka';
@@ -25,7 +25,7 @@ class GetShelterBuildingController extends \Controller\ControllerBase
         if (!$ret) {
             $shlFilter = '';
             $i = 0;
-            foreach($shelter_type as $s) {
+            foreach ($shelter_type as $s) {
                 if ($i != 0) {
                     $shlFilter .= ' || ';
                 }
@@ -51,7 +51,7 @@ class GetShelterBuildingController extends \Controller\ControllerBase
                    ?p = <http://teapot.bodic.org/predicate/延床面積>
                 ')
                 ->orderby('?facility ?building');
-            $ret = $query->execute();
+            $ret = $query->executeSpilit(5000);
             if ($ret['resultCode'] == \MyLib\TeapotCtrl::RESULT_CODE_OK) {
                 $ret += array('updated'=>time());
                 $db->setContents($key, $ret);

@@ -1,6 +1,9 @@
 <?php
 namespace Model;
 
+/**
+ * モデルのベースクラス
+ */
 abstract class ModelBase
 {
     protected $db;
@@ -17,10 +20,15 @@ abstract class ModelBase
         $this->db = null;
     }
 
-    public function vucuum() {
+    /**
+     * VUCUUMの実行
+     */
+    public function vucuum()
+    {
         $this->db->exec(
             "VACUUM;"
         );
     }
+
     abstract public function setup();
 }

@@ -7,11 +7,11 @@ var MapCtrl = (function() {
     this._saveAppStoreFnc = saveAppStoreFnc;
     if (!this._appStore.mapLocate) {
       this._appStore.mapLocate = {
-        lat : 33.6015669,
-        lng : 130.395785,
+        lat: 33.6015669,
+        lng: 130.395785,
         zoom: 11,
-        startLat : 33.6015669,
-        startLng : 130.395785
+        startLat: 33.6015669,
+        startLng: 130.395785
       };
     }
     var latlng = new google.maps.LatLng(this._appStore.mapLocate.lat, this._appStore.mapLocate.lng);
@@ -23,18 +23,18 @@ var MapCtrl = (function() {
     this._map = new google.maps.Map(document.getElementById(divName), opts);
 
     this._startMarker = new google.maps.Marker({
-      position : new google.maps.LatLng(this._appStore.mapLocate.startLat, this._appStore.mapLocate.startLng),
-      title: "Start",
-      draggable : true,
-      icon : '/' + getAppName() + '/img/start_marker.png'
+      position: new google.maps.LatLng(this._appStore.mapLocate.startLat, this._appStore.mapLocate.startLng),
+      title: 'Start',
+      draggable: true,
+      icon: '/' + getAppName() + '/img/start_marker.png'
     });
     this._startMarker.setMap(this._map);
 
     rendererOptions = {
       draggable: false,
-      preserveViewport:false,
-      markerOptions : {
-        visible : false
+      preserveViewport: false,
+      markerOptions: {
+        visible: false
       }
     };
     this._directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
@@ -55,14 +55,14 @@ var MapCtrl = (function() {
     });
 
     // スタートマーカの位置変更
-    google.maps.event.addListener(this._startMarker, "position_changed", function() {
+    google.maps.event.addListener(this._startMarker, 'position_changed', function() {
       if (self._appStore.mapLocate) {
         self._appStore.mapLocate.startLat = self._startMarker.position.lat();
         self._appStore.mapLocate.startLng = self._startMarker.position.lng();
         self._saveAppStoreFnc();
       }
     });
-  }
+  };
 
   var p = inst.prototype;
   p.getMapObj = function(cols) {
@@ -84,10 +84,10 @@ var MapCtrl = (function() {
   p.moveStartMarkerToCurPos = function() {
     if (!navigator.geolocation) {
       $.msgBox({
-        title: "Error",
+        title: 'Error',
         content: 'Not support geolocation.',
-        type: "error",
-        buttons: [{ value: "Ok" }],
+        type: 'error',
+        buttons: [{value: 'Ok'}]
       });
       return;
     }
@@ -97,13 +97,13 @@ var MapCtrl = (function() {
         var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         self._map.panTo(pos);
         self._startMarker.setPosition(pos);
-      } , 
+      },
       function(error) {
         $.msgBox({
-          title: "Error",
+          title: 'Error',
           content: error.message,
-          type: "error",
-          buttons: [{ value: "Ok" }],
+          type: 'error',
+          buttons: [{value: 'Ok'}]
         });
       }
     );
@@ -124,8 +124,8 @@ var MapCtrl = (function() {
     };
 
     var self = this;
-    this._directionsService.route(request, function(response, status){
-      if (status != google.maps.DirectionsStatus.OK){
+    this._directionsService.route(request, function(response, status) {
+      if (status != google.maps.DirectionsStatus.OK) {
         callback(status, null);
         return;
       }

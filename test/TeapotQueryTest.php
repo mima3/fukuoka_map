@@ -109,7 +109,7 @@ class TeapotQueryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(\MyLib\TeapotCtrl::RESULT_CODE_ERR_SERVER, $ret['resultCode'], 'TooLarge');
 
         $query = $this->createQueryTooLarge();
-        $ret = $query->execute_spilit(5000);
+        $ret = $query->executeSpilit(5000);
         $this->assertEquals(\MyLib\TeapotCtrl::RESULT_CODE_OK, $ret['resultCode'], 'OK');
 
         $query = $query->where('<http://teapot.bodic.org/facility/さくら病院〒814_0142（医療法人社団江頭会さくら病院）>', '?p', '?o')
@@ -120,7 +120,7 @@ class TeapotQueryTest extends \PHPUnit_Framework_TestCase
         $query = $query->where('<http://teapot.bodic.org/facility/さくら病院〒814_0142（医療法人社団江頭会さくら病院）>', '?p', '?o')
                        ->filter('!isBlank(?o)')
                        ->orderby('?p ?o');
-        $ret_spilit = $query->execute_spilit(5);
+        $ret_spilit = $query->executeSpilit(5);
 
         $this->assertEquals(json_encode($ret_single), json_encode($ret_spilit), '分割時と一括時が同じ結果になること');
     }

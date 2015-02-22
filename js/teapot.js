@@ -2,19 +2,19 @@ var teapot = (function() {
   var END_POINT_PREFIXES = 'http://teapot-api.bodic.org/api/teapot/prefixes';
   var END_POINT_SPARQL = 'http://teapot-api.bodic.org/api/v1/sparql';
   var prefixes = {
-    'geo':'http://www.w3.org/2003/01/geo/wgs84_pos#',
-    'rdf':'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-    'rdfs':'http://www.w3.org/2000/01/rdf-schema#',
-    'xsd':'http://www.w3.org/2001/XMLSchema#',
-    'schema':'http://schema.org/',
-    'foaf':'http://xmlns.com/foaf/0.1/',
-    'tpp':'http://teapot.bodic.org/predicate/',
-    'tpf':'http://teapot.bodic.org/facility/',
-    'tpe':'http://teapot.bodic.org/equipement/',
-    'tpo':'http://teapot.bodic.org/organization/',
-    'tpt':'http://teapot.bodic.org/type/',
-    'tpd':'http://teapot.bodic.org/dataset/',
-    'tps':'http://teapot.bodic.org/stats/'
+    'geo': 'http://www.w3.org/2003/01/geo/wgs84_pos#',
+    'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+    'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+    'xsd': 'http://www.w3.org/2001/XMLSchema#',
+    'schema': 'http://schema.org/',
+    'foaf': 'http://xmlns.com/foaf/0.1/',
+    'tpp': 'http://teapot.bodic.org/predicate/',
+    'tpf': 'http://teapot.bodic.org/facility/',
+    'tpe': 'http://teapot.bodic.org/equipement/',
+    'tpo': 'http://teapot.bodic.org/organization/',
+    'tpt': 'http://teapot.bodic.org/type/',
+    'tpd': 'http://teapot.bodic.org/dataset/',
+    'tps': 'http://teapot.bodic.org/stats/'
   };
   /**
    * WHERE区、UNION区の構築用のオブジェクト
@@ -24,51 +24,59 @@ var teapot = (function() {
       this._parent = parent;
       this._lstWhere = [];
       this._lstFilter = [];
-    }
+    };
+
     var p = inst.prototype;
+
     p.where = function(subject, predicate, obj) {
       var s = util.format('%s %s %s .', subject, predicate, obj);
       this._lstWhere.push(s);
       return this;
     };
+
     p.filter = function(condition) {
       var s = util.format(' FILTER (%s) ', condition);
       this._lstFilter.push(s);
       return this;
-    }
+    };
+
     p.filterRegex = function(col, match, option) {
-      var s = util.format(' FILTER regex(%s,"%s","%s") ', col, match , option);
+      var s = util.format(' FILTER regex(%s,"%s","%s") ', col, match, option);
       this._lstFilter.push(s);
       return this;
-    }
+    };
 
     p.execute = function(callback) {
       return this._parent.execute(callback);
     };
+
     p.limit = function(d) {
       return this._parent.limit(d);
-    }
+    };
+
     p.offset = function(d) {
       return this._parent.offset(d);
-    }
+    };
+
     p.orderby = function(d) {
       return this._parent.orderby(d);
-    }
+    };
+
     p.union = function() {
       return this._parent.union();
-    }
+    };
 
-    p.sql = function () {
-      var s = '{'
+    p.sql = function() {
+      var s = '{';
       for (var i = 0; i < this._lstWhere.length; ++i) {
         s += this._lstWhere[i];
       }
       for (var i = 0; i < this._lstFilter.length; ++i) {
         s += this._lstFilter[i];
       }
-      s += '}'
+      s += '}';
       return s;
-    }
+    };
 
     return inst;
   })();
@@ -87,8 +95,9 @@ var teapot = (function() {
     }
     var inst = function() {
       _reset(this);
-    }
+    };
     var p = inst.prototype;
+
     p.columns = function(cols) {
       if (!cols) {
         this._strCol = '*';
@@ -99,7 +108,7 @@ var teapot = (function() {
     };
 
     p.where = function(subject, predicate, obj) {
-      if(this._lstWhere.length==0) {
+      if (this._lstWhere.length == 0) {
         this._lstWhere.push(new Where(this));
       }
       return this._lstWhere[0].where(subject, predicate, obj);
@@ -109,20 +118,22 @@ var teapot = (function() {
       var obj = new Where(this);
       this._lstWhere.push(obj);
       return obj;
-    }
+    };
 
     p.limit = function(d) {
       this._limit = d;
       return this;
-    }
+    };
+
     p.offset = function(d) {
       this._offset = d;
       return this;
-    }
+    };
+
     p.orderby = function(d) {
       this._orderby = d;
       return this;
-    }
+    };
 
     p.execute = function(callback) {
       var sql = '';
@@ -140,13 +151,13 @@ var teapot = (function() {
         sql += this._lstWhere[i].sql();
       }
       sql += '}';
-      if (typeof this._orderby !== "undefined") {
+      if (typeof this._orderby !== 'undefined') {
         sql += util.format(' ORDER BY %s ', this._orderby);
       }
-      if (typeof this._limit !== "undefined") {
+      if (typeof this._limit !== 'undefined') {
         sql += util.format(' LIMIT %d ', this._limit);
       }
-      if (typeof this._offset !== "undefined") {
+      if (typeof this._offset !== 'undefined') {
         sql += util.format(' OFFSET %d ', this._offset);
       }
       console.log(sql);
@@ -156,14 +167,15 @@ var teapot = (function() {
         {
           query: sql
         },
-        function (res) {
+        function(res) {
           callback(null, res);
         },
-        "json"
-      ).error(function(e){
+        'json'
+      ).error(function(e) {
          callback(e.responseText, null);
       });
-    }
+    };
+
     return inst;
   })();
 
@@ -174,15 +186,15 @@ var teapot = (function() {
     $.get(
       END_POINT_PREFIXES,
       {},
-      function (res) {
+      function(res) {
         if (res['@status'] != 'OK') {
           callback(res['@status'], null);
           return;
         }
         callback(null, prefixes);
       },
-      "json"
-    ).error(function(e){
+      'json'
+    ).error(function(e) {
        callback(e.responseText, null);
     });
   }
@@ -200,8 +212,8 @@ var teapot = (function() {
           return;
         }
         var classTree = {
-          classes:{}, 
-          tree:{
+          classes: {},
+          tree: {
             'http://teapot.bodic.org/type/rootobject' : {}
           }
         };
@@ -226,7 +238,6 @@ var teapot = (function() {
   }
 
 
-
   function _convertObject(res, defaultobj, hierarchy) {
     var recs = res.results.bindings;
     var ret = defaultobj;
@@ -248,8 +259,8 @@ var teapot = (function() {
             tmp = tmp[k];
           } else {
             var v = {
-              value : recs[i][hierarchy[j+1]].value,
-              translate_value : recs[i][hierarchy[j+1]].translate_value
+              value: recs[i][hierarchy[j + 1]].value,
+              translate_value: recs[i][hierarchy[j + 1]].translate_value
             };
 
             if (tmp[k]) {
@@ -266,7 +277,7 @@ var teapot = (function() {
           }
         }
       }
-      
+
       /*
       var s = recs[i].s.value;
       var p = recs[i].p.value;
@@ -292,7 +303,7 @@ var teapot = (function() {
   return {
     runPrefixes: _runPrefixes,
     buildClassesTree: _buildClassesTree,
-    Query : Query,
-    convertObject : _convertObject
+    Query: Query,
+    convertObject: _convertObject
   };
 })();

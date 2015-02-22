@@ -5,7 +5,7 @@ $(function() {
   $(document).ready(function() {
     header.initialize();
 
-    var mapCtrl = new MapCtrl('map_canvas', 
+    var mapCtrl = new MapCtrl('map_canvas',
       header.getAppStore(),
       function() {
         header.saveAppStore();
@@ -18,43 +18,43 @@ $(function() {
 
 
     var waterDepthDict = {
-      11: {name:'0～0.5ｍ未満', strokeColor:'#ccccff', fillColor:'#ccccff'},
-      12: {name:'0.5～1.0ｍ未満', strokeColor:'#aaaaff', fillColor:'#aaaaff'},
-      13: {name:'1.0～2.0ｍ未満', strokeColor:'#8888ff', fillColor:'#8888ff'},
-      14: {name:'2.0～5.0ｍ未満', strokeColor:'#4444ff', fillColor:'#4444ff'},
-      15: {name:'5.0ｍ以上', strokeColor:'#0000ff', fillColor:'#0000ff'},
+      11: {name: '0～0.5ｍ未満', strokeColor: '#ccccff', fillColor: '#ccccff'},
+      12: {name: '0.5～1.0ｍ未満', strokeColor: '#aaaaff', fillColor: '#aaaaff'},
+      13: {name: '1.0～2.0ｍ未満', strokeColor: '#8888ff', fillColor: '#8888ff'},
+      14: {name: '2.0～5.0ｍ未満', strokeColor: '#4444ff', fillColor: '#4444ff'},
+      15: {name: '5.0ｍ以上', strokeColor: '#0000ff', fillColor: '#0000ff'},
 
-      21: {name:'0～0.5ｍ未満', strokeColor:'#ccccff', fillColor:'#ccccff'},
-      22: {name:'0.5～1.0ｍ未満', strokeColor:'#aaaaff', fillColor:'#aaaaff'},
-      23: {name:'1.0～2.0ｍ未満', strokeColor:'#8888ff', fillColor:'#8888ff'},
-      24: {name:'2.0～3.0ｍ未満', strokeColor:'#6666ff', fillColor:'#6666ff'},
-      25: {name:'3.0～4.0ｍ未満', strokeColor:'#4444ff', fillColor:'#4444ff'},
-      26: {name:'4.0～5.0ｍ未満', strokeColor:'#2222ff', fillColor:'#2222ff'},
-      27: {name:'5.0ｍ以上', strokeColor:'#0000ff', fillColor:'#0000ff'}
+      21: {name: '0～0.5ｍ未満', strokeColor: '#ccccff', fillColor: '#ccccff'},
+      22: {name: '0.5～1.0ｍ未満', strokeColor: '#aaaaff', fillColor: '#aaaaff'},
+      23: {name: '1.0～2.0ｍ未満', strokeColor: '#8888ff', fillColor: '#8888ff'},
+      24: {name: '2.0～3.0ｍ未満', strokeColor: '#6666ff', fillColor: '#6666ff'},
+      25: {name: '3.0～4.0ｍ未満', strokeColor: '#4444ff', fillColor: '#4444ff'},
+      26: {name: '4.0～5.0ｍ未満', strokeColor: '#2222ff', fillColor: '#2222ff'},
+      27: {name: '5.0ｍ以上', strokeColor: '#0000ff', fillColor: '#0000ff'}
     };
     for (var k in waterDepthDict) {
       var t = $('#message').find('#waterDepth' + k).text();
       if (t) {
-        var html = $('#tmplExample').render({color:waterDepthDict[k].fillColor, message:t});
+        var html = $('#tmplExample').render({color: waterDepthDict[k].fillColor, message: t});
         $('#example_flood_data').append(html);
       }
     }
-    
+
     var sedimentTypeDict = {
-      1:{name:'土石流危険渓流', strokeColor:'#000000', fillColor:'#ff8000'},
-      2:{name:'土石流危険区域', strokeColor:'#000000', fillColor:'#ff00e4'},
-      5:{name:'急傾斜地崩壊危険箇所', strokeColor:'#FFA500', fillColor:'#27104f'},
-      6:{name:'急傾斜地崩壊危険区域', strokeColor:'#FFA500', fillColor:'#b491b2'},
-      7:{name:'地すべり危険箇所', strokeColor:'#273c9c', fillColor:'#273c9c'},
-      8:{name:'地すべり危険区域', strokeColor:'#b32e49', fillColor:'#b32e49'},
-      9:{name:'地すべり氾濫区域', strokeColor:'#2dc8a9', fillColor:'#2dc8a9'},
-      10:{name:'地すべり堪水域', strokeColor:'#35b24e', fillColor:'#35b24e'},
-      11:{name:'雪崩危険箇所', strokeColor:'#000000', fillColor:'#e1e1e1'}
+      1: {name: '土石流危険渓流', strokeColor: '#000000', fillColor: '#ff8000'},
+      2: {name: '土石流危険区域', strokeColor: '#000000', fillColor: '#ff00e4'},
+      5: {name: '急傾斜地崩壊危険箇所', strokeColor: '#FFA500', fillColor: '#27104f'},
+      6: {name: '急傾斜地崩壊危険区域', strokeColor: '#FFA500', fillColor: '#b491b2'},
+      7: {name: '地すべり危険箇所', strokeColor: '#273c9c', fillColor: '#273c9c'},
+      8: {name: '地すべり危険区域', strokeColor: '#b32e49', fillColor: '#b32e49'},
+      9: {name: '地すべり氾濫区域', strokeColor: '#2dc8a9', fillColor: '#2dc8a9'},
+      10: {name: '地すべり堪水域', strokeColor: '#35b24e', fillColor: '#35b24e'},
+      11: {name: '雪崩危険箇所', strokeColor: '#000000', fillColor: '#e1e1e1'}
     };
     for (var k in sedimentTypeDict) {
       var t = $('#message').find('#sedimentType' + k).text();
       if (t) {
-        var html = $('#tmplExample').render({color:sedimentTypeDict[k].fillColor, message:t});
+        var html = $('#tmplExample').render({color: sedimentTypeDict[k].fillColor, message: t});
         $('#example_sediment_data').append(html);
       }
     }
@@ -80,23 +80,24 @@ $(function() {
 
     function formatSelShelterType(state) {
       if (!state.id) return state.text; // optgroup
-      return "<img style='vertical-align: middle' class='flag' width='20' height='20' src='" + $(state.element[0]).attr('img') + "'/>" + state.text;
+      return '<img style="vertical-align: middle" class="flag" width="20" height="20" src="' + $(state.element[0]).attr('img') + '"/>' + state.text;
     }
+
     $('#selShelterType').select2({
       width: 'resolve' ,
       escapeMarkup: function(m) { return m; },
       formatResult: formatSelShelterType,
       formatSelection: formatSelShelterType,
-      dropdownAutoWidth: true,
-      
+      dropdownAutoWidth: true
+
     });
 
     // 土砂災害用スタイルの関数
     var styleSedimentFeature = function() {
       return function(feature) {
         return {
-          strokeWeight : 0.2,
-          strokeColor : sedimentTypeDict[feature.getProperty('hazardAreaType')].strokeColor,
+          strokeWeight: 0.2,
+          strokeColor: sedimentTypeDict[feature.getProperty('hazardAreaType')].strokeColor,
           fillColor: sedimentTypeDict[feature.getProperty('hazardAreaType')].fillColor,
           fillOpacity: 0.9
         };
@@ -105,16 +106,16 @@ $(function() {
     var styleExpectedFoodFeature = function() {
       return function(feature) {
         return {
-          strokeWeight : 0.2,
-          strokeColor : waterDepthDict[feature.getProperty('waterDepth')].strokeColor,
+          strokeWeight: 0.2,
+          strokeColor: waterDepthDict[feature.getProperty('waterDepth')].strokeColor,
           fillColor: waterDepthDict[feature.getProperty('waterDepth')].fillColor,
           fillOpacity: 0.9
         };
       };
     };
     var dataFeatureCache = {
-      'flood_data' : {cache:null, styleFnc:styleExpectedFoodFeature}, 
-      'sediment_data' : {cache:null, styleFnc:styleSedimentFeature}
+      'flood_data' : {cache: null, styleFnc: styleExpectedFoodFeature},
+      'sediment_data' : {cache: null, styleFnc: styleSedimentFeature}
     };
 
     /**
@@ -158,10 +159,10 @@ $(function() {
           util.getJson(
             '/' + getAppName() + '/json/get_sediment_disaster_hazard_area',
             {
-              swlat : swlat,
-              swlng : swlng,
-              nelat : nelat,
-              nelng : nelng,
+              swlat: swlat,
+              swlng: swlng,
+              nelat: nelat,
+              nelng: nelng,
               lang: header.getLang()
             },
             function(err, data) {
@@ -193,10 +194,10 @@ $(function() {
           util.getJson(
             '/' + getAppName() + '/json/get_expected_flood_area',
             {
-              swlat : swlat,
-              swlng : swlng,
-              nelat : nelat,
-              nelng : nelng,
+              swlat: swlat,
+              swlng: swlng,
+              nelat: nelat,
+              nelng: nelng,
               lang: header.getLang()
             },
             function(err, data) {
@@ -233,19 +234,19 @@ $(function() {
       var postRange = [];
       var lat = targetRange[0];
       var lng = targetRange[1];
-      for (var i = 0 ; i < rangeDivCnt; ++i) {
+      for (var i = 0; i < rangeDivCnt; ++i) {
         lat = targetRange[0];
-        for (var j = 0 ; j < rangeDivCnt; ++j) {
+        for (var j = 0; j < rangeDivCnt; ++j) {
           var ix = j;
-          if (lat <= nelat && nelat <= lat+perLat && lng <= nelng && nelng <= lng + perLng) {
+          if (lat <= nelat && nelat <= lat + perLat && lng <= nelng && nelng <= lng + perLng) {
             ix = 0;
           }
           tasksDict['flood_data'].splice(ix, 0,
-            createGetExpectedFloodAreaFnc(lat, lng, lat+perLat, lng + perLng)
-          )
+            createGetExpectedFloodAreaFnc(lat, lng, lat + perLat, lng + perLng)
+          );
           tasksDict['sediment_data'].splice(ix, 0,
-            createGetSedimentDisasterHazardAreaSurfaceFnc(lat, lng, lat+perLat, lng + perLng)
-          )
+            createGetSedimentDisasterHazardAreaSurfaceFnc(lat, lng, lat + perLat, lng + perLng)
+          );
           lat = lat + perLat;
         }
         lng = lng + perLng;
@@ -260,10 +261,10 @@ $(function() {
         $.unblockUI();
         if (err) {
           $.msgBox({
-            title: "Error",
+            title: 'Error',
             content: err,
-            type: "error",
-            buttons: [{ value: "Ok" }],
+            type: 'error',
+            buttons: [{value: 'Ok'}]
           });
           return;
         }
@@ -273,14 +274,14 @@ $(function() {
     /**
      * Startマークを中央に
      */
-    $('#btnCurPosCenter').button().click(function(){
+    $('#btnCurPosCenter').button().click(function() {
       mapCtrl.moveStartMarkerToCenter();
     });
 
     /**
      * 現在位置にスタートマーカを移動する.
      */
-    $('#btnCurPos').button().click(function(){
+    $('#btnCurPos').button().click(function() {
       mapCtrl.moveStartMarkerToCurPos();
     });
 
@@ -290,7 +291,7 @@ $(function() {
       '地区避難場所' : '/' + getAppName() + '/img/shelter_area.png',
       '広域避難場所' : '/' + getAppName() + '/img/shelter_area.png'
     };
-    
+
     function createMarker(key, obj) {
       var marker;
       if (obj['http://teapot.bodic.org/predicate/緯度'] &&
@@ -303,15 +304,15 @@ $(function() {
           console.log('notfoundicon', obj['http://teapot.bodic.org/predicate/避難所情報'].value);
         }
         marker = new google.maps.Marker({
-          icon : icon
+          icon: icon
         });
         marker.setPosition(pos);
         // マーカーのクリックイベント
-        google.maps.event.addListener(marker, "click", function() {
+        google.maps.event.addListener(marker, 'click', function() {
           var tmp = key.split('/');
-          var prefix = 'route_' + tmp[tmp.length-1];
+          var prefix = 'route_' + tmp[tmp.length - 1];
           console.log(obj);
-          var c = $('#tmplInfoWindow').render({prefix:prefix, data:obj});
+          var c = $('#tmplInfoWindow').render({prefix: prefix, data: obj});
 
           var infowindow = new google.maps.InfoWindow({
             content: c
@@ -319,7 +320,7 @@ $(function() {
           infowindow.open(map, marker);
 
           // infowindowが表示された場合に発火されるイベント
-          google.maps.event.addListener(infowindow, 'domready', function(){
+          google.maps.event.addListener(infowindow, 'domready', function() {
             $('#btnClose_' + prefix).button().click(function() {
               infowindow.close();
             });
@@ -328,16 +329,16 @@ $(function() {
               mapCtrl.findRoute(pos, function(err, res) {
                 if (err) {
                   $.msgBox({
-                    title: "Error",
+                    title: 'Error',
                     content: err,
-                    type: "error",
-                    buttons: [{ value: "Ok" }],
+                    type: 'error',
+                    buttons: [{ value: 'Ok' }]
                   });
                   return;
                 }
                 $('#legs_' + prefix).empty();
                 var legs = res.routes[0].legs[0];
-                $('#legs_' + prefix).html('<p>' + legs.distance.text + ' '  + legs.duration.text + '</p>');
+                $('#legs_' + prefix).html('<p>' + legs.distance.text + ' ' + legs.duration.text + '</p>');
               });
             });
           });
@@ -407,15 +408,15 @@ $(function() {
         $.unblockUI();
         if (err) {
           $.msgBox({
-            title: "Error",
+            title: 'Error',
             content: err,
-            type: "error",
-            buttons: [{ value: "Ok" }],
+            type: 'error',
+            buttons: [{value: 'Ok'}]
           });
           return;
         }
         facilities = teapot.convertObject(res[0]);
-        var building = teapot.convertObject(res[1], null,  ['facility', 'building', 'p', 'o']);
+        var building = teapot.convertObject(res[1], null, ['facility', 'building', 'p', 'o']);
         for (var k in building) {
           if (!facilities[k]) {
             continue;

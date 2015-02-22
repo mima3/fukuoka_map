@@ -4,7 +4,7 @@
 $(function() {
   $(document).ready(function() {
     header.initialize();
-    var mapCtrl = new MapCtrl('map_canvas', 
+    var mapCtrl = new MapCtrl('map_canvas',
       header.getAppStore(),
       function() {
         header.saveAppStore();
@@ -41,15 +41,15 @@ $(function() {
         var long = obj['http://teapot.bodic.org/predicate/経度'].value;
         var pos = new google.maps.LatLng(parseFloat(lat), parseFloat(long));
         marker = new google.maps.Marker({
-          icon : '/' + getAppName() + '/img/hospital.png'
+          icon: '/' + getAppName() + '/img/hospital.png'
         });
         marker.setPosition(pos);
         // マーカーのクリックイベント
-        google.maps.event.addListener(marker, "click", function() {
+        google.maps.event.addListener(marker, 'click', function() {
           var tmp = key.split('/');
-          var prefix = 'route_' + tmp[tmp.length-1];
+          var prefix = 'route_' + tmp[tmp.length - 1];
           console.log(obj);
-          var c = $('#tmplInfoWindow').render({prefix:prefix, data:obj});
+          var c = $('#tmplInfoWindow').render({prefix: prefix, data: obj});
 
           var infowindow = new google.maps.InfoWindow({
             content: c
@@ -57,7 +57,7 @@ $(function() {
           infowindow.open(map, marker);
 
           // infowindowが表示された場合に発火されるイベント
-          google.maps.event.addListener(infowindow, 'domready', function(){
+          google.maps.event.addListener(infowindow, 'domready', function() {
             $('#btnClose_' + prefix).button().click(function() {
               infowindow.close();
             });
@@ -66,16 +66,16 @@ $(function() {
               mapCtrl.findRoute(pos, function(err, res) {
                 if (err) {
                   $.msgBox({
-                    title: "Error",
+                    title: 'Error',
                     content: err,
-                    type: "error",
-                    buttons: [{ value: "Ok" }],
+                    type: 'error',
+                    buttons: [{value: 'Ok'}]
                   });
                   return;
                 }
                 $('#legs_' + prefix).empty();
                 var legs = res.routes[0].legs[0];
-                $('#legs_' + prefix).html('<p>' + legs.distance.text + ' '  + legs.duration.text + '</p>');
+                $('#legs_' + prefix).html('<p>' + legs.distance.text + ' ' + legs.duration.text + '</p>');
               });
             });
           });
@@ -99,16 +99,16 @@ $(function() {
         '/' + getAppName() + '/json/get_hospital',
         {
           lang: header.getLang(),
-          medical_subjects: sel,
+          medical_subjects: sel
         },
         function(err, data) {
           console.log(err, data);
           if (err) {
             $.msgBox({
-              title: "Error",
+              title: 'Error',
               content: err,
-              type: "error",
-              buttons: [{ value: "Ok" }],
+              type: 'error',
+              buttons: [{value: 'Ok'}]
             });
             return;
           }

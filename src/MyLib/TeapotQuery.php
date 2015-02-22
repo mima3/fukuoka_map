@@ -2,6 +2,7 @@
 namespace MyLib;
 
 /**
+ * SPARQLのクエリーを構築するクラス
  */
 class TeapotQuery
 {
@@ -9,7 +10,7 @@ class TeapotQuery
     private $strCol = '*';
     private $lstWhere = array();
     private $limit;
-    private $distinct=False;
+    private $distinct=false;
     private $offset;
     private $orderby;
     private $prefixes = array(
@@ -30,13 +31,20 @@ class TeapotQuery
 
     /**
      * コンストラクタ
-     * @param string $ctrl TeapotCtrl
+     * @param[in] $ctrl TeapotCtrl
      */
-    public function __construct($ctrl) {
+    public function __construct($ctrl)
+    {
         $this->api = $ctrl;
     }
 
-    function columns($cols) {
+    /**
+     * 列を指定
+     * @param[in] $cols 列の配列
+     * @retval this
+     */
+    public function columns($cols)
+    {
         if (!$cols) {
             $this->strCol = '*';
             return $this;
@@ -45,42 +53,83 @@ class TeapotQuery
         return $this;
     }
 
-    function where($subject, $predicate, $obj) {
-        if(count($this->lstWhere) == 0) {
+    /**
+     * where区
+     * @param[in] $subject 主語
+     * @param[in] $predicate 述語
+     * @param[in] $obj 目的語
+     * @retval TeapotWhere
+     */
+    public function where($subject, $predicate, $obj)
+    {
+        if (count($this->lstWhere) == 0) {
             array_push($this->lstWhere, new \MyLib\TeapotWhere($this));
         }
         return $this->lstWhere[0]->where($subject, $predicate, $obj);
     }
 
-    function union() {
+    /**
+     * union区
+     * @retval TeapotWhere
+     */
+    public function union()
+    {
         $obj = new \MyLib\TeapotWhere($this);
         array_push($this->lstWhere, $obj);
         return $obj;
     }
 
-    function distinct() {
-        $this->distinct = True;
+    /**
+     * distinct区
+     * @retval this
+     */
+    public function distinct()
+    {
+        $this->distinct = true;
         return $this;
     }
 
-    function limit($d) {
+    /**
+     * limit区
+     * @param[in] @limit limit
+     * @retval this
+     */
+    public function limit($d)
+    {
         $this->limit = $d;
         return $this;
     }
 
-    function offset($d) {
+    /**
+     * offset区
+     * @param[in] @offset offset
+     * @retval this
+     */
+    public function offset($d)
+    {
         $this->offset = $d;
         return $this;
     }
 
-    function orderby($d) {
+    /**
+     * orderby区
+     * @param[in] @offset orderby
+     * @retval this
+     */
+    public function orderby($d)
+    {
         $this->orderby = $d;
         return $this;
     }
 
-    function sql() {
+    /**
+     * SQL文の構築
+     * @retval SQL文
+     */
+    public function sql()
+    {
         $sql = '';
-        foreach ($this->prefixes as $key=>$value) {
+        foreach ($this->prefixes as $key => $value) {
             $sql .= sprintf("PREFIX %s: <%s>\n", $key, $value);
         }
         if ($this->distinct) {
@@ -88,7 +137,7 @@ class TeapotQuery
         } else {
             $sql .= sprintf('SELECT %s ', $this->strCol);
         }
-        foreach ($this->lstWhere as $i=>$item) {
+        foreach ($this->lstWhere as $i => $item) {
             if ($i ==0) {
                 $sql .= ' WHERE {';
             } else {
@@ -110,22 +159,34 @@ class TeapotQuery
 
         return $sql;
     }
-    function execute() {
+
+    /**
+     * SPARQL実行
+     * @retval 結果セット
+     */
+    public function execute()
+    {
         $sql = $this->sql();
         $this->strCol = '*';
         $this->lstWhere = array();
-        $this->limit = NULL;
-        $this->distinct=False;
-        $this->offset = NULL;
-        $this->orderby = NULL;
+        $this->limit = null;
+        $this->distinct=false;
+        $this->offset = null;
+        $this->orderby = null;
         return $this->api->execute($sql);
     }
 
-    function execute_spilit($limit) {
+    /**
+     * SPARQLを分割して実行する
+     * これはTeapotの2097152 bytes of stringの制限を回避する目的に使用する。
+     * @retval 結果セット
+     */
+    public function executeSpilit($limit)
+    {
         $count = 0;
         $this->limit($limit);
         $binding = [];
-        while (True) {
+        while (true) {
             $this->offset($limit * $count);
             $sql = $this->sql();
             $ret = $this->api->execute($sql);
@@ -141,11 +202,10 @@ class TeapotQuery
         }
         $this->strCol = '*';
         $this->lstWhere = array();
-        $this->limit = NULL;
-        $this->distinct=False;
-        $this->offset = NULL;
-        $this->orderby = NULL;
+        $this->limit = null;
+        $this->distinct=false;
+        $this->offset = null;
+        $this->orderby = null;
         return $ret;
     }
-
 }

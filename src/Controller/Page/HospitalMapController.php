@@ -32,7 +32,7 @@ class HospitalMapController extends \Controller\ControllerBase
         }
         $medicalSubjects = array();
         $bindings = $ret['contents']->results->bindings;
-        foreach($bindings as $b) {
+        foreach ($bindings as $b) {
             $medicalSubjects += array($b->o->value => $b->o->translate_value);
         }
 
@@ -67,7 +67,7 @@ class HospitalMapController extends \Controller\ControllerBase
         $tempData = array(
             'appName' => $this->app->getName(),
             'medicalSubjects' => $medicalSubjects,
-            'gmaplang'=>$gmaplang, 
+            'gmaplang'=>$gmaplang,
             'label'=>$label
         );
         $tempData += $this->getHeaderTempalteData();

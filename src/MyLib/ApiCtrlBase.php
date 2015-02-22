@@ -2,6 +2,7 @@
 namespace MyLib;
 
 /**
+ * 外部APIを実行するベースクラス
  */
 class ApiCtrlBase
 {
@@ -28,7 +29,7 @@ class ApiCtrlBase
     }
 
     /**
-     * APIを実行してレスポンスの取得
+     * APIをgetしてレスポンスの取得
      * もし、503エラーの場合は、WAIT_COUNTマイクロ秒後に
      * MAX_TRY_COUNT回までリトライする。
      * @param  string $url      対象のURL
@@ -41,6 +42,16 @@ class ApiCtrlBase
         $code = $this->client->get($url, $param);
         return $this->checkResponce($url, $param, $trycount, $code, $this->get);
     }
+
+    /**
+     * APIをpostしてレスポンスの取得
+     * もし、503エラーの場合は、WAIT_COUNTマイクロ秒後に
+     * MAX_TRY_COUNT回までリトライする。
+     * @param  string $url      対象のURL
+     * @param  array  $param    パラメータの連想配列
+     * @param  int    $trycount 現在の試行回数
+     * @return array  レスポンスの結果
+     */
     protected function post($url, $param, $trycount)
     {
     

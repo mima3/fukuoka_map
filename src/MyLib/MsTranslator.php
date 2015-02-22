@@ -2,6 +2,7 @@
 namespace MyLib;
 
 /**
+ * MicrosoftTranslatorを用いた翻訳
  */
 class MsTranslator
 {
@@ -32,12 +33,21 @@ class MsTranslator
         $this->addedlist = array();
     }
 
+    /**
+     * 翻訳の実行
+     * 以下の条件の場合、翻訳を行わない
+     * 1. srcが未指定
+     * 2. srcが数値、アルファベット、記号のみで構成されている
+     * 3. 翻訳前と翻訳語の言語が同じ
+     * @param [in] $src 翻訳対象
+     * @retval 翻訳語の文字
+     */
     public function translator($src)
     {
         if (!$src) {
             return $src;
         }
-        if(preg_match("/^[!-~]+$/", $src)){
+        if (preg_match("/^[!-~]+$/", $src)) {
             return $src;
         }
         if (ctype_alnum($src)) {

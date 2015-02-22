@@ -17,14 +17,15 @@ class GetShelterController extends \Controller\ControllerBase
         return;
     }
 
-    public function getShelter($shelter_type) {
+    public function getShelter($shelter_type)
+    {
         $db = $this->models['ApiCacheModel'];
         $key = 'GetShelter_Fukuoka' . implode('_', $shelter_type);
         $ret = $db->getContents($key);
         if (!$ret) {
             $shlFilter = '';
             $i = 0;
-            foreach($shelter_type as $s) {
+            foreach ($shelter_type as $s) {
                 if ($i != 0) {
                     $shlFilter .= ' || ';
                 }
@@ -49,7 +50,7 @@ class GetShelterController extends \Controller\ControllerBase
                    ?p = <http://teapot.bodic.org/predicate/郵便番号> ||
                    ?p = <http://teapot.bodic.org/predicate/addressClean>')
                 ->orderby('?s ?p');
-            $ret = $query->execute_spilit(5000);
+            $ret = $query->executeSpilit(5000);
             if ($ret['resultCode'] == \MyLib\TeapotCtrl::RESULT_CODE_OK) {
                 $ret += array('updated'=>time());
                 $db->setContents($key, $ret);

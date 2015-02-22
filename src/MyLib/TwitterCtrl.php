@@ -50,7 +50,7 @@ class TwitterCtrl
 
         $this->callbackurl = $callbackurl;
         try {
-            if ( isset($_SESSION['access_token'] ) ) {
+            if (isset($_SESSION['access_token'])) {
                 $this->accessToken = $_SESSION['access_token']['oauth_token'];
                 $this->accessSecret = $_SESSION['access_token']['oauth_token_secret'];
                 $this->tmhOAuth = new \tmhOAuth(
@@ -69,7 +69,7 @@ class TwitterCtrl
                         'consumer_secret' => $this->consumerSecret,
                     )
                 );
-                if ( isset($_SESSION['oauth']) and isset( $_REQUEST['oauth_verifier'] ) ) {
+                if (isset($_SESSION['oauth']) and isset( $_REQUEST['oauth_verifier'])) {
                      // テンポラリートークンは取得済み
                      $this->status = self::STATUS_REQUEST_ACCESS_TOKEN;
                 } else {
@@ -84,7 +84,7 @@ class TwitterCtrl
     /**
      * 現在のステータス状態を取得
      * @retval<TwitterCtrl::STATUS_NONE> エラーの状態
-     * @retval<TwitterCtrl::STATUS_REQUEST_TEMPORARY_TOKEN> 
+     * @retval<TwitterCtrl::STATUS_REQUEST_TEMPORARY_TOKEN>
      *   テンポラリー・トークンを取得する必要がある状態
      * @retval<TwitterCtrl::STATUS_REQUEST_ACCESS_TOKEN>
      *  アクセストークンを取得する必要がある状態
@@ -131,7 +131,6 @@ class TwitterCtrl
         );
 
         if ($code == 200) {
-
             $_SESSION['oauth'] = $this->tmhOAuth->extract_params($this->tmhOAuth->response['response']);
             $authurl = $this->tmhOAuth->url("oauth/authorize", '') . "?oauth_token={$_SESSION['oauth']['oauth_token']}";
 
@@ -151,12 +150,12 @@ class TwitterCtrl
      */
     public function requesAccessToken()
     {
-        if ( !isset( $_REQUEST['oauth_verifier'] ) ) {
+        if (!isset( $_REQUEST['oauth_verifier'])) {
             $this->reset();
 
             return false;
         }
-        if ( !isset( $_SESSION['oauth'] ) ) {
+        if (!isset($_SESSION['oauth'])) {
             $this->reset();
 
             return false;
@@ -189,7 +188,7 @@ class TwitterCtrl
     }
     public function requestVerify()
     {
-        if ( !$this->isAuthorized() ) {
+        if (!$this->isAuthorized()) {
             return null;
         }
         $code = $this->tmhOAuth->request(
@@ -241,7 +240,7 @@ class TwitterCtrl
     }
     public function requestGeoSearch($lat, $long, $accuracy)
     {
-        if ( !$this->isAuthorized() ) {
+        if (!$this->isAuthorized()) {
             return false;
         }
         $geo = $lat . ',' . $long . ',' . $accuracy;

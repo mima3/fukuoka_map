@@ -40,10 +40,22 @@ class DisasterMapController extends \Controller\ControllerBase
         );
 
         $shelterType = array(
-          '収容避難所' => array('title'=>$tran->translator('収容避難所'), image=>'/' . $this->app->getName() . '/img/shelter_home.png'),
-          '一時避難所' => array('title'=>$tran->translator('一時避難所'), image=>'/' . $this->app->getName() . '/img/shelter_temp.png'),
-          '地区避難場所' => array('title'=>$tran->translator('地区避難場所'), image=>'/' . $this->app->getName() . '/img/shelter_area.png'),
-          '広域避難場所' => array('title'=>$tran->translator('広域避難場所'), image=>'/' . $this->app->getName() . '/img/shelter_area.png')
+          '収容避難所' => array(
+              'title'=>$tran->translator('収容避難所'),
+              image=>'/' . $this->app->getName() . '/img/shelter_home.png'
+          ),
+          '一時避難所' => array(
+              'title'=>$tran->translator('一時避難所'),
+              image=>'/' . $this->app->getName() . '/img/shelter_temp.png'
+          ),
+          '地区避難場所' => array(
+              'title'=>$tran->translator('地区避難場所'),
+              image=>'/' . $this->app->getName() . '/img/shelter_area.png'
+          ),
+          '広域避難場所' => array(
+              'title'=>$tran->translator('広域避難場所'),
+              image=>'/' . $this->app->getName() . '/img/shelter_area.png'
+          )
         );
         $label = array(
             'title' => $tran->translator('災害マップ'),
@@ -69,7 +81,7 @@ class DisasterMapController extends \Controller\ControllerBase
         );
         $tempData = array(
             'appName' => $this->app->getName(),
-            'gmaplang'=>$gmaplang, 
+            'gmaplang'=>$gmaplang,
             'shelterType' => $shelterType,
             'javaScriptMsg' => $javaScriptMsg,
             'label'=>$label

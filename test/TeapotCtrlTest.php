@@ -50,7 +50,7 @@ class TeapotCtrlTest extends \PHPUnit_Framework_TestCase
       $ctrl = new \MyLib\TeapotCtrl('http://teapot-api.bodic.org/api/v1/xxx', 'http://teapot-api.bodic.org/api/v1/places');
       $ret = $ctrl->execute('select distinct * where {?s ?p ?o .  FILTER(!isBlank(?s)) } order by ?s LIMIT 1');
       $this->assertEquals(
-          '{"resultCode":1,"errorMsg":"ResponceCode: 404 Message:{\"@message\":\"The requested path is nowhere to be found on this server...\"}","contents":null}',
+          '{"resultCode":1,"errorMsg":"ResponceCode: 404 Message:{\"@message\":\"The requested path is nowhere to be found on this server. Please check the teapot API documentation at http:\/\/teapot.bodic.org\/api_doc.html.\"}","contents":null}',
           json_encode($ret),
           'エンドポイントにつながらない場合'
       );

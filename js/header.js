@@ -130,6 +130,6 @@ var header = (function() {
       initialize: _initialize,
       getLang: _getLang,
       getAppStore: _getAppStore,
-      saveAppStore : _saveAppStore
+      saveAppStore: _saveAppStore
   };
 })();
