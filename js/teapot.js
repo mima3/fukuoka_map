@@ -1,6 +1,6 @@
 var teapot = (function() {
-  var END_POINT_PREFIXES = 'http://teapot-api.bodic.org/api/teapot/prefixes';
-  var END_POINT_SPARQL = 'http://teapot-api.bodic.org/api/v1/sparql';
+  var END_POINT_PREFIXES = 'https://teapot-api.bodic.org/api/teapot/prefixes';
+  var END_POINT_SPARQL = 'https://teapot-api.bodic.org/api/v1/sparql';
   var prefixes = {
     'geo': 'http://www.w3.org/2003/01/geo/wgs84_pos#',
     'rdf': 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
