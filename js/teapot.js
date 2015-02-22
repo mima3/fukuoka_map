@@ -90,6 +90,7 @@ var teapot = (function() {
       inst._strCol = '*';
       inst._lstWhere = [];
       inst._limit = undefined;
+      inst._distinct = false;
       inst._offset = undefined;
       inst._orderby = undefined;
     }
@@ -135,13 +136,20 @@ var teapot = (function() {
       return this;
     };
 
-    p.execute = function(callback) {
+    p.distinct = function() {
+      this._distinct = true;
+      return this;
+    };
+    p.sql = function() {
       var sql = '';
       for (var key in prefixes) {
         sql += util.format('PREFIX %s: <%s>\n', key, prefixes[key]);
       }
-
-      sql += util.format('SELECT DISTINCT %s ', this._strCol);
+      if (inst._distinct) {
+        sql += util.format('SELECT DISTINCT %s ', this._strCol);
+      } else {
+        sql += util.format('SELECT %s ', this._strCol);
+      }
       for (var i = 0; i < this._lstWhere.length; ++i) {
         if (i == 0) {
           sql += ' WHERE {';
@@ -160,8 +168,10 @@ var teapot = (function() {
       if (typeof this._offset !== 'undefined') {
         sql += util.format(' OFFSET %d ', this._offset);
       }
-      console.log(sql);
-      _reset(this);
+      return sql;
+    }
+
+    function postSprql(sql, callback) {
       $.post(
         END_POINT_SPARQL,
         {
@@ -174,8 +184,41 @@ var teapot = (function() {
       ).error(function(e) {
          callback(e.responseText, null);
       });
+    }
+
+    p.execute = function(callback) {
+      var sql = this.sql();
+      _reset(this);
+      postSprql(sql, callback);
     };
 
+    p.executeSpilit = function(limit, callback) {
+      this.limit(limit);
+      var binding = [];
+      var cnt = 0;
+      var self = this;
+      function nestPost() {
+        self.offset(limit * cnt);
+        var sql = self.sql();
+        postSprql(sql, function(err, res) {
+          if (err) {
+            _reset(this);
+            callback(err);
+            return;
+          }
+          if (res.results.bindings.length == 0) {
+            _reset(this);
+            res.results.bindings = res.results.bindings.concat(binding);
+            callback(null, res);
+            return;
+          }
+          binding = binding.concat(res.results.bindings);
+          ++cnt;
+          nestPost();
+        });
+      }
+      nestPost();
+    };
     return inst;
   })();
 
@@ -202,6 +245,7 @@ var teapot = (function() {
   function _buildClassesTree(callback) {
     var query = new Query();
     query
+      .distinct()
       .columns(['?s', '?p', '?o'])
       .where('?s', '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>', '<http://www.w3.org/2000/01/rdf-schema#class>')
       .where('?s', '?p', '?o')
@@ -277,25 +321,6 @@ var teapot = (function() {
           }
         }
       }
-
-      /*
-      var s = recs[i].s.value;
-      var p = recs[i].p.value;
-      var o = recs[i].o.value;
-      if (!ret[s]) {
-        ret[s] = {};
-      }
-      if (ret[s][p]) {
-        if (!Array.isArray(ret[s][p])) {
-          var tmp = ret[s][p];
-          ret[s][p] = [];
-          ret[s][p].push(tmp);
-        }
-        ret[s][p].push(o);
-      } else {
-        ret[s][p] = o;
-      }
-      */
     }
     return ret;
   }
