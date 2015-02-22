@@ -4,7 +4,7 @@
 しかしながら機械翻訳は完全ではないため、不適切なメッセージかもしれません。この場合、Twitterのアカウントにログインすることで、その不適切なメッセージを修正できます。  
 今回は、現在提供されている福岡市のオープンデータにおいて、外国からの観光客でも利用する可能性があると思われる病院と避難所のデータを多言語化しています。  
 
-福岡市オープンデータ多言語化MOD
+福岡市オープンデータ多言語化MOD  
 http://needtec.sakura.ne.jp/fukuoka_map  
 
 共施設等情報のオープンデータ実証 開発者サイト  
@@ -16,26 +16,27 @@ https://github.com/mima3/kokudo
 
 インストール方法
 -----------------
-1. Gitよりコードを取得して、Webサーバーに配置します。  
+1.Gitよりコードを取得して、Webサーバーに配置します。  
 
-    git clone git://github.com/mima3/fukuoka_map.git 
+    git clone git://github.com/mima3/fukuoka_map.git
     cp -rf fukuoka_map /home/xxx/www/
 
-2. 必要なディレクトリを作成します。  
+2.必要なディレクトリを作成します。  
+
     cd /home/xxx/www/fukuoka_map/
     mkdir logs
     mkdir cache
     mkdir compiled
 
-3. composerにより依存ファイルのインストールを行います。  
+3.composerにより依存ファイルのインストールを行います。  
 
     cd /home/xxx/www/fukuoka_map/
     php ~/composer.phar self-update 
     php ~/composer.phar install
 
-4. default.htaccessを参考に.htaccessを作成します。  
+4.default.htaccessを参考に.htaccessを作成します。  
 
-5. config.php.defaultを参考にconfig.phpを作成します。  
+5.config.php.defaultを参考にconfig.phpを作成します。  
 この際、以下のように、非公開の領域のconfig.phpを参照するようにWebサーバー中のconfig.phpを指定するといいでしょう。
 
     <?php
