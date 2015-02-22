@@ -185,7 +185,7 @@ class TeapotQuery
     {
         $count = 0;
         $this->limit($limit);
-        $binding = [];
+        $binding = array();
         while (true) {
             $this->offset($limit * $count);
             $sql = $this->sql();
