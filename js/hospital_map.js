@@ -1,5 +1,5 @@
 /**
- * スタート画面のスクリプト
+ * 病院検索画面のスクリプト
  */
 $(function() {
   $(document).ready(function() {

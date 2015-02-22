@@ -1,5 +1,5 @@
 /**
- * スタート画面のスクリプト
+ * 災害マップ画面のスクリプト
  */
 $(function() {
   $(document).ready(function() {

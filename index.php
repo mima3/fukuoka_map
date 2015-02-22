@@ -325,6 +325,22 @@ $app->get('/page/disaster_map', function() use ($app, $modules, $models, $lang) 
     $ctrl->route();
 });
 
+/**
+ * TeapotSparql
+ */
+$app->get('/page/teapot_sparql', function() use ($app, $modules, $models, $lang) {
+    $ctrl = new \Controller\Page\TeapotSparqlController($app, $modules, $models);
+    $ctrl->route();
+});
+
+/**
+ * TeapotExplore
+ */
+$app->get('/page/teapot_explore', function() use ($app, $modules, $models, $lang) {
+    $ctrl = new \Controller\Page\TeapotExploreController($app, $modules, $models);
+    $ctrl->route();
+});
+
 
 //////////////////////////////////////////////////////////////////////////
 //

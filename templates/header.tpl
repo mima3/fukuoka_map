@@ -31,6 +31,8 @@
         <li><a href="/{$appName}/page/hospital_map?lang={$lang}">{$headLabel['hospital_map']}</a></li>
         <li><a href="/{$appName}/page/disaster_map?lang={$lang}">{$headLabel['disaster_map']}</a></li>
         <li><a href="/{$appName}/page/translation_log?lang={$lang}">{$headLabel['translation_log']}</a></li>
+        <li><a href="/{$appName}/page/teapot_sparql?lang={$lang}">TeapotSparql</a></li>
+        <li><a href="/{$appName}/page/teapot_explore?lang={$lang}">TeapotExplore</a></li>
       </ul>
     </div>
   </div>

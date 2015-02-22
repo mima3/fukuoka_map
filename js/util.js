@@ -1,7 +1,7 @@
 /**
  * ユーティリティ関数
  */
-var util = {
+var util = (function() {
   /**
    * AjaxでJSONを取得する
    * @param {string} url  実行URL
@@ -9,8 +9,8 @@ var util = {
    * @param {function} callbackFunc データ取得時のコールバック関数
    * @param {function} beforesendFunc 処理開始前のコールバック関数
    * @param {function} completeFunc 処理終了時のコールバック関数
-   */
-  getJson: function(url, data, callbackFunc, beforesendFunc, completeFunc) {
+  **/
+  function _getJson(url, data, callbackFunc, beforesendFunc, completeFunc) {
     $.ajax({
       url: url,
       type: 'GET',
@@ -26,11 +26,11 @@ var util = {
 
       // 通信成功時の処理
       success: function(result, textStatus, xhr) {
-        var station = result.contents;
+        var result = result.contents;
         if (result.resultCode != 0) {
            console.log(result.errorMsg);
         }
-        callbackFunc(result.errorMsg, result.contents);
+        callbackFunc(0, result);
       },
 
       // 通信失敗時の処理
@@ -42,13 +42,13 @@ var util = {
         callbackFunc(error, {});
       }
     });
-  },
+  }
 
   /**
    * クエリーパラメータを配列で取得
    * @return {Array} クエリパラメータの配列
    */
-  getQueryParam: function() {
+  function _getQueryParam() {
     var qsParm = new Array();
 
     var query = window.location.search.substring(1);
@@ -62,36 +62,77 @@ var util = {
       }
     }
     return qsParm;
-  },
-  getEscapedId: function(id) {
-    id = id.replace(/\:/g, '\\:');
-    id = id.replace(/\./g, '\\.');
-    return id;
-  },
-
-  /**
-   * Jquery-mobile用のダイアログメッセージ
-   */
-  showPopupDialog: function(message) {
-    $('#msgPopup').find('[data-role="main"]').html(message);
-    $(':mobile-pagecontainer').pagecontainer(
-      'change',
-      '#msgPopup',
-      {
-        transition: 'pop',
-        role: 'dialog'
-      }
-    );
-  },
-
-  /**
-   * Jquery-mobile用のポップアップメッセージ
-   */
-  showPopup: function(popId, message, target) {
-    // $(popId).html(message).popup('open', { positionTo: target });
-    // 中央の方が誤りタップが少ないと思われる。
-    var pop = $(popId);
-    pop.find('span').html(message);
-    pop.popup('open', { positionTo: 'origin', transition: 'pop'});
   }
-};
+
+
+  var formatRegExp = /%[sdj%]/g;
+  function _format(f) {
+    if (!_isString(f)) {
+      var objects = [];
+      for (var i = 0; i < arguments.length; i++) {
+        objects.push(arguments[i]);
+      }
+      return objects.join(' ');
+    }
+
+    var i = 1;
+    var args = arguments;
+    var len = args.length;
+    var str = String(f).replace(formatRegExp, function(x) {
+      if (x === '%%') return '%';
+      if (i >= len) return x;
+      switch (x) {
+        case '%s': return String(args[i++]);
+        case '%d': return Number(args[i++]);
+        case '%j':
+          try {
+            return JSON.stringify(args[i++]);
+          } catch (_) {
+            return '[Circular]';
+          }
+        default:
+          return x;
+      }
+    });
+    for (var x = args[i]; i < len; x = args[++i]) {
+      if (isNull(x) || !isObject(x)) {
+        str += ' ' + x;
+      } else {
+        str += ' ' + inspect(x);
+      }
+    }
+    return str;
+  }
+
+  function _isObject(arg) {
+    return typeof arg === 'object' && arg !== null;
+  }
+
+  function _isNull(arg) {
+    return arg === null;
+  }
+
+  function _isString(arg) {
+    return typeof arg === 'string';
+  }
+
+  function _isUndefined(arg) {
+    return arg === void 0;
+  }
+
+  function _numberSeparator(x) {
+    return String(x).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+  }
+
+  function _escapeHTML(val) {
+    return $('<pre />').text(val).html();
+  };
+
+  return {
+    getJson: _getJson,
+    getQueryParam: _getQueryParam,
+    format: _format,
+    numberSeparator: _numberSeparator,
+    escapeHTML: _escapeHTML
+  };
+})();
