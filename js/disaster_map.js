@@ -4,9 +4,20 @@
 $(function() {
   $(document).ready(function() {
     header.initialize();
-    var latlng = new google.maps.LatLng(33.6015669, 130.395785);
+    var appstore = header.getAppStore();
+    console.log(appstore);
+    if (!appstore.mapLocate) {
+      appstore.mapLocate = {
+        lat : 33.6015669,
+        lng : 130.395785,
+        zoom: 11
+      };
+    }
+    console.log(latlng);
+
+    var latlng = new google.maps.LatLng(appstore.mapLocate.lat, appstore.mapLocate.lng);
     var opts = {
-      zoom: 11,
+      zoom: appstore.mapLocate.zoom,
       center: latlng,
       //scrollwheel: false,
       //disableDoubleClickZoom: true,
@@ -15,6 +26,7 @@ $(function() {
       //streetViewControl : false,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
+    header.appStore
     var map = new google.maps.Map(document.getElementById("map_canvas"), opts);
     var markerList = [];
     var dataFeatures = [];
@@ -83,23 +95,15 @@ $(function() {
     // GoogleMapの表示位置変更
     google.maps.event.addListener(map, 'bounds_changed', function() {
       var latlngBounds = map.getBounds();
-      var swLatlng = latlngBounds.getSouthWest();
-      var swlat = swLatlng.lat();
-      var swlng = swLatlng.lng();
-      var neLatlng = latlngBounds.getNorthEast();
-      var nelat = neLatlng.lat();
-      var nelng = neLatlng.lng();
-      var mkLat = startMarker.position.lat();
-      var mkLng = startMarker.position.lng();
-      console.log(swlat , mkLat , nelat, swlng, mkLng, nelng);
-      /*
-      if (swlat <= mkLat && mkLat <=nelat &&
-          swlng <= mkLng && mkLng <=nelng) {
-      } else {
-        // 範囲外
-        startMarker.setPosition(latlngBounds.getCenter());
+      var center = latlngBounds.getCenter();
+      if (appstore.mapLocate) {
+        appstore.mapLocate = {
+          lat : center.lat(),
+          lng : center.lng(),
+          zoom: map.zoom
+        };
+        header.saveAppStore();
       }
-      */
     });
 
     /**

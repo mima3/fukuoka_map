@@ -81,11 +81,7 @@ var header = (function() {
       lang = $('#langSelect').val();
       appStore.lang = lang;
       // ローカルストレージの保存
-      try {
-        store.set(getAppName(), appStore);
-      } catch (e) {
-        // 保存できなくても続行
-      }
+      _saveAppStore();
       var url = window.location.protocol + '//' + window.location.host + window.location.pathname;
       var i = 0;
       for (var prop in params) {
@@ -122,9 +118,18 @@ var header = (function() {
     return appStore;
   }
 
+  function _saveAppStore() {
+      try {
+        store.set(getAppName(), appStore);
+      } catch (e) {
+        // 保存できなくても続行
+      }
+  }
+
   return {
       initialize: _initialize,
       getLang: _getLang,
-      getAppStore: _getAppStore
+      getAppStore: _getAppStore,
+      saveAppStore : _saveAppStore
   };
 })();
