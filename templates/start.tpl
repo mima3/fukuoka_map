@@ -17,6 +17,8 @@
   <h1>{$label['title']}</h3>
   {$label['introductText']}
   <h2>Link</h2>
+  <p><a href="http://teapot.bodic.org/">{$label['teapot']}</a></p>
+  <p><a href="https://github.com/mima3/fukuoka_map">GitHub</a></p>
   <h2>{$label['feature']}</h2>
   <h3><a href="/{$appName}/page/hospital_map?lang={$lang}">{$headLabel['hospital_map']}</a></h3>
   {$label['hospitalMapText']}

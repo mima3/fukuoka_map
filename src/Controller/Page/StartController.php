@@ -36,7 +36,8 @@ class StartController extends \Controller\ControllerBase
             'disasterMapText' => nl2br($tran->translator($disasterMapText)),
             'translatLogText' => nl2br($tran->translator($translatLogText)),
             'feature' => $tran->translator('機能'),
-            'update_translation' => $tran->translator('テキスト修正')
+            'update_translation' => $tran->translator('テキスト修正'),
+            'teapot' => $tran->translator('共施設等情報のオープンデータ実証 開発者サイト')
         );
         $tempData = array(
             'appName' => $this->app->getName(),
