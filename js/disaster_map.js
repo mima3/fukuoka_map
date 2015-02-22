@@ -274,7 +274,7 @@ $(function() {
         'gust_data' : [],
         'sediment_data' : []
       };
-      var targetRange = [33.42294614050342, 130.02156319824212, 33.88989773419436, 130.57087960449212];
+      var targetRange = [33.424957, 130.032166, 33.874405, 130.494919];
       var rangeDivCnt = 3;
       var perLat = (targetRange[2] - targetRange[0]) / rangeDivCnt;
       var perLng = (targetRange[3] - targetRange[1]) / rangeDivCnt;

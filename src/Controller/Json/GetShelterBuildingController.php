@@ -39,6 +39,7 @@ class GetShelterBuildingController extends \Controller\ControllerBase
                 ->where('?facility', '<http://teapot.bodic.org/predicate/避難所情報>', '?a')
                 ->where('?building', '<http://teapot.bodic.org/predicate/containedIn>', '?facility')
                 ->where('?building', '<http://teapot.bodic.org/predicate/種別>', '?c')
+                ->where('?facility', '<http://teapot.bodic.org/predicate/避難所情報>', '?x')
                 ->where('?building', '?p', '?o')
                 ->filter($shlFilter)
                 ->filter('?c ="建物"')

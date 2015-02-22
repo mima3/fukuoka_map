@@ -47,6 +47,11 @@ class DisasterMapController extends \Controller\ControllerBase
         );
         $label = array(
             'title' => $tran->translator('災害マップ'),
+            'building_name' => $tran->translator('建物名称'),
+            'structure' => $tran->translator('構造'),
+            'ground_floor' => $tran->translator('地上階数'),
+            'basement_floor' => $tran->translator('地下階数'),
+            'floor_area' => $tran->translator('延床面積'),
             'shelter_type' => $tran->translator('避難所種類'),
             'curpos' => $tran->translator('現在地'),
             'no_data' => $tran->translator('非表示'),

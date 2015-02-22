@@ -56,7 +56,7 @@ class GetHospitalController extends \Controller\ControllerBase
                    ?p = <http://teapot.bodic.org/predicate/病床数合計> ||
                    ?p = <http://teapot.bodic.org/predicate/addressClean>')
                 ->orderby('?s ?p ?o');
-            $ret = $query->execute();
+            $ret = $query->execute_spilit(5000);
             if ($ret['resultCode'] == \MyLib\TeapotCtrl::RESULT_CODE_OK) {
                 $ret += array('updated'=>time());
                 $db->setContents($key, $ret);

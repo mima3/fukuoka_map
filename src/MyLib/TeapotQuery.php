@@ -104,7 +104,7 @@ class TeapotQuery
         if (isset($this->limit)) {
             $sql .= sprintf(' LIMIT %d ', $this->limit);
         }
-        if (isset($this->_offset)) {
+        if (isset($this->offset)) {
             $sql .= sprintf(' OFFSET %d ', $this->offset);
         }
 
@@ -119,6 +119,33 @@ class TeapotQuery
         $this->offset = NULL;
         $this->orderby = NULL;
         return $this->api->execute($sql);
+    }
+
+    function execute_spilit($limit) {
+        $count = 0;
+        $this->limit($limit);
+        $binding = [];
+        while (True) {
+            $this->offset($limit * $count);
+            $sql = $this->sql();
+            $ret = $this->api->execute($sql);
+            if ($ret['resultCode'] != \MyLib\TeapotCtrl::RESULT_CODE_OK) {
+                break;
+            }
+            if (count($ret['contents']->results->bindings) == 0) {
+                $ret['contents']->results->bindings = $binding;
+                break;
+            }
+            $binding = array_merge($binding, $ret['contents']->results->bindings);
+            $count += 1;
+        }
+        $this->strCol = '*';
+        $this->lstWhere = array();
+        $this->limit = NULL;
+        $this->distinct=False;
+        $this->offset = NULL;
+        $this->orderby = NULL;
+        return $ret;
     }
 
 }

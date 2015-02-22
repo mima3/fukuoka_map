@@ -20,11 +20,11 @@
     {{if data['building']}}
       <table class="normal">
         <thead>
-          <th>建物名称</th>
-          <th>構造</th>
-          <th>地上階数</th>
-          <th>地下階数</th>
-          <th>延床面積</th>
+          <th>{/literal}{$label['building_name']}{literal}</th>
+          <th>{/literal}{$label['structure']}{literal}</th>
+          <th>{/literal}{$label['ground_floor']}{literal}</th>
+          <th>{/literal}{$label['basement_floor']}{literal}</th>
+          <th>{/literal}{$label['floor_area']}{literal}</th>
         </thead>
         <tbody>
         {{props data['building']}}
