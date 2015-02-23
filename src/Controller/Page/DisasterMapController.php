@@ -77,7 +77,7 @@ class DisasterMapController extends \Controller\ControllerBase
             'route_search' => $tran->translator('ルート検索'),
             'data_ref' => $tran->translator('このページは下記のデータから作成されています。'),
             'kokudosuji' => $tran->translator('国土数値情報'),
-            'teapot' => $tran->translator('共施設等情報のオープンデータ実証 開発者サイト')
+            'teapot' => $tran->translator('公共施設等情報のオープンデータ実証 開発者サイト')
         );
         $tempData = array(
             'appName' => $this->app->getName(),
