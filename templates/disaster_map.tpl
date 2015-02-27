@@ -111,6 +111,7 @@
     <div id="map_canvas"></div>
   </div>
   <div  style="clear:both;"></div>
+</div>
   <p>{$label['data_ref']}</p>
   <ul>
     <li>
@@ -123,7 +124,6 @@
     <li><a href="http://teapot.bodic.org/">{$label['teapot']}</a></li>
   </ul>
   <p>このアプリケーションは、以下の著作物を改変して利用しています。【福岡県、福岡市、糸島市】、【公共施設等情報】、クリエイティブ・コモンズ・ライセンス 表示 2.1 日本（<a href="http://creativecommons.org/licenses/by/2.1/jp/">http://creativecommons.org/licenses/by/2.1/jp/</a>）、アプリコンテスト利用規約（<a href="http://teapot.bodic.org/license.html">http://teapot.bodic.org/license.html</a>）</p>
-</div>
 <!-- javascriptで利用する翻訳文字 -->
 <div id="message" style='display:none'>
   {foreach from=$javaScriptMsg key=key item=item}
