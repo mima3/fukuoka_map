@@ -53,7 +53,7 @@ $(function() {
 
     $.blockUI({ message: '<img src="/' + getAppName() + '/img/loading.gif" />' });
     $.post(
-      "https://teapot-api.bodic.org/api/v1/sparql",
+      "http://teapot-api.bodic.org/api/v1/sparql",
       {
         query: sql
       },
@@ -81,7 +81,7 @@ $(function() {
     var sql = $('#sql').val();
     $.blockUI({ message: '<img src="/' + getAppName() + '/img/loading.gif" />' });
     $.get(
-      "https://teapot-api.bodic.org/api/teapot/prefixes",
+      "http://teapot-api.bodic.org/api/teapot/prefixes",
       {},
       function (res) {
         $.unblockUI();
@@ -107,7 +107,7 @@ $(function() {
     var sql = $('#sql').val();
     $.blockUI({ message: '<img src="/' + getAppName() + '/img/loading.gif" />' });
     $.get(
-      "https://teapot-api.bodic.org/api/teapot/vocabularies",
+      "http://teapot-api.bodic.org/api/teapot/vocabularies",
       {},
       function (res) {
         $.unblockUI();
